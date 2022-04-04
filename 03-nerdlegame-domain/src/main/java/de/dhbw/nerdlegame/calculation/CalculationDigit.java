@@ -16,7 +16,8 @@ public enum CalculationDigit {
     PLUS    ('+'),
     MINUS   ('-'),
     TIMES   ('*'),
-    DIVIDED ('/');
+    DIVIDED ('/'),
+    EQUALS  ('=');
 
     private final char c;
     CalculationDigit(final char c) {
@@ -24,7 +25,6 @@ public enum CalculationDigit {
     }
 
     public static CalculationDigit getDigit(final char c) {
-        System.out.println(c);
         for(CalculationDigit digit : CalculationDigit.values()) {
             if(digit.c == c) {
                 return digit;

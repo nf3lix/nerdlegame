@@ -1,13 +1,13 @@
 package de.dhbw.nerdlegame.calculation;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CalculationDigitTest {
 
@@ -25,6 +25,12 @@ public class CalculationDigitTest {
         assertEquals(CalculationDigit.getDigit('-'), CalculationDigit.MINUS);
         assertEquals(CalculationDigit.getDigit('*'), CalculationDigit.TIMES);
         assertEquals(CalculationDigit.getDigit('/'), CalculationDigit.DIVIDED);
+        assertEquals(CalculationDigit.getDigit('='), CalculationDigit.EQUALS);
+    }
+
+    @Test
+    public void throwExceptionWhenCharIsNoValidDigit() {
+        assertThrows(IllegalArgumentException.class, () -> CalculationDigit.getDigit('c'));
     }
 
 }
