@@ -15,6 +15,7 @@
         <module>00-nerdlegame-server</module>
         <module>00-nerdlegame-client</module>
         <module>xx-nerdlegame-coverage</module>
+        <module>04-nerdlegame-abstraction</module>
     </modules>
 
     <properties>

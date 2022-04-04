@@ -6,11 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="03-nerdlegame-domain" />
         <module name="01-nerdlegame-adapters" />
-        <module name="00-nerdlegame-client" />
+        <module name="04-nerdlegame-abstraction" />
         <module name="00-nerdlegame-server" />
         <module name="02-nerdlegame-application" />
+        <module name="03-nerdlegame-domain" />
+        <module name="00-nerdlegame-client" />
         <module name="xx-nerdlegame-coverage" />
       </profile>
     </annotationProcessing>
