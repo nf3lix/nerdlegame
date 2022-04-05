@@ -11,13 +11,17 @@ public class Server {
     private ServerSocket server = null;
     private DataInputStream inputStream = null;
 
-    public Server(final int port) {
+    private SocketObserver socketObserver;
+
+    public Server(final int port, final SocketObserver observer) {
+        this.socketObserver = observer;
         try {
             server = new ServerSocket(port);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        while (true) {
+        int connectedPlayersCount = 0;
+        while (connectedPlayersCount <= NerdleGame.MAX_PLAYERS) {
             try {
                 socket = server.accept();
                 System.out.println("client connected");
@@ -25,6 +29,8 @@ public class Server {
                 e.printStackTrace();
             }
             new EchoThread(socket).start();
+            socketObserver.onClientConnected();
+            connectedPlayersCount++;
         }
     }
 

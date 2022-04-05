@@ -21,4 +21,8 @@ public class NerdleGame {
         }
     }
 
+    public int currentPlayerCount() {
+        return players.size();
+    }
+
 }

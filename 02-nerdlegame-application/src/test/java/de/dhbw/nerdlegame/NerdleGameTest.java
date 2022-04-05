@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class NerdleGameException {
+public class NerdleGameTest {
 
     @Test
     public void throwExceptionOnRegisteringPlayerIfGameIsNotWaitingForPlayers() {
