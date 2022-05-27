@@ -1,5 +1,6 @@
 package de.dhbw.nerdlegame;
 
+import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.player.Player;
 
 import java.util.ArrayList;
@@ -10,6 +11,11 @@ public class NerdleGame {
     public static final int MAX_PLAYERS = 2;
     private final List<Player> players = new ArrayList<>();
     private GameState gameState = GameState.WAIT_FOR_PLAYERS;
+    private final Calculation calculation;
+
+    public NerdleGame(final CalculationGenerator generator) {
+        this.calculation = generator.nextCalculation();
+    }
 
     public void registerPlayer(final Player player) {
         if(gameState != GameState.WAIT_FOR_PLAYERS) {
