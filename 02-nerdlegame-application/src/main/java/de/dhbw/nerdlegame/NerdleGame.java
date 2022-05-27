@@ -2,6 +2,7 @@ package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.Guess;
+import de.dhbw.nerdlegame.guess.GuessResult;
 import de.dhbw.nerdlegame.player.Player;
 
 import java.util.ArrayList;
@@ -28,8 +29,11 @@ public class NerdleGame {
         }
     }
 
-    public void makeGuess(final Guess guess) {
-        guess.matches(calculation);
+    public GuessResult makeGuess(final Guess guess) {
+        if(gameState != GameState.GUESSING) {
+            throw new GameStateException("Guesses can only be made during " + GameState.GUESSING.name() + " state. Current state is " + gameState.name());
+        }
+        return GuessResult.createFromGuess(calculation, guess.calculation());
     }
 
     public int currentPlayerCount() {

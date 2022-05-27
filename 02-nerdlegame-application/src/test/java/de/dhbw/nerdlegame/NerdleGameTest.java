@@ -1,6 +1,7 @@
 package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
+import de.dhbw.nerdlegame.guess.Guess;
 import de.dhbw.nerdlegame.player.Player;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,14 @@ public class NerdleGameTest {
         final NerdleGame nerdleGame = new NerdleGame(calculationGenerator());
         registerAllPlayers(nerdleGame);
         assertThrows(GameStateException.class, () -> nerdleGame.registerPlayer(mock(Player.class)));
+    }
+
+    @Test
+    public void throwExceptionOnGuessingIfGameWaitsForPlayers() {
+        final NerdleGame nerdleGame = new NerdleGame(calculationGenerator());
+        assertThrows(GameStateException.class, () -> nerdleGame.makeGuess(mock(Guess.class)));
+        nerdleGame.registerPlayer(mock(Player.class));
+        assertThrows(GameStateException.class, () -> nerdleGame.makeGuess(mock(Guess.class)));
     }
 
     @Test
