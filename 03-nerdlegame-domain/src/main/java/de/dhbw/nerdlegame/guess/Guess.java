@@ -21,4 +21,8 @@ public class Guess {
         return this.guess.equals(calculation);
     }
 
+    public Calculation calculation() {
+        return guess;
+    }
+
 }

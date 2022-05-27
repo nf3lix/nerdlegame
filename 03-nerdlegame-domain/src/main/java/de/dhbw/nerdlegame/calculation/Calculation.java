@@ -3,6 +3,8 @@ package de.dhbw.nerdlegame.calculation;
 import de.dhbw.nerdlegame.expression.Expression;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Calculation {
 
@@ -29,6 +31,19 @@ public final class Calculation {
         for(int charIndex = 0; charIndex < NUMBER_OF_DIGITS; charIndex++) {
             digits[charIndex] = CalculationDigit.getDigit(chars[charIndex]);
         }
+    }
+
+    public CalculationDigit getDigit(final int id) {
+        return digits[id];
+    }
+
+    public boolean contains(final CalculationDigit digit) {
+        return occurrencesOf(digit) >= 1;
+    }
+
+    public int occurrencesOf(final CalculationDigit digit) {
+        final List<CalculationDigit> occurrences = Arrays.stream(digits).filter(actualDigit -> actualDigit == digit).collect(Collectors.toList());
+        return occurrences.size();
     }
 
     @Override

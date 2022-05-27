@@ -1,6 +1,7 @@
 package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
+import de.dhbw.nerdlegame.guess.Guess;
 import de.dhbw.nerdlegame.player.Player;
 
 import java.util.ArrayList;
@@ -25,6 +26,10 @@ public class NerdleGame {
         if(players.size() == MAX_PLAYERS) {
             gameState = gameState.nextState();
         }
+    }
+
+    public void makeGuess(final Guess guess) {
+        guess.matches(calculation);
     }
 
     public int currentPlayerCount() {
