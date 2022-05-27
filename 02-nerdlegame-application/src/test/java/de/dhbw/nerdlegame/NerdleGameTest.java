@@ -1,20 +1,24 @@
 package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.player.Player;
-import de.dhbw.nerdlegame.player.PlayerId;
-import de.dhbw.nerdlegame.player.PlayerName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
 
 public class NerdleGameTest {
 
     @Test
     public void throwExceptionOnRegisteringPlayerIfGameIsNotWaitingForPlayers() {
         final NerdleGame nerdleGame = new NerdleGame();
-        nerdleGame.registerPlayer(new Player(new PlayerId("e4ccc47e-8f3f-48c5-8bf2-a861936b9664"), new PlayerName("TEST")));
-        nerdleGame.registerPlayer(new Player(new PlayerId("e4ccc47e-8f3f-48c5-8bf2-a861936b9664"), new PlayerName("TEST")));
-        assertThrows(GameStateException.class, () -> nerdleGame.registerPlayer(new Player(new PlayerId("e4ccc47e-8f3f-48c5-8bf2-a861936b9664"), new PlayerName("TEST"))));
+        registerAllPlayers(nerdleGame);
+        assertThrows(GameStateException.class, () -> nerdleGame.registerPlayer(mock(Player.class)));
+    }
+
+    private void registerAllPlayers(final NerdleGame nerdleGame) {
+        for(int playerCount = 0; playerCount < NerdleGame.MAX_PLAYERS; playerCount++) {
+            nerdleGame.registerPlayer(mock(Player.class));
+        }
     }
 
 }
