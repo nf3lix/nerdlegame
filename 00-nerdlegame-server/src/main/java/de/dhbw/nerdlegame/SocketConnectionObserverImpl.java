@@ -6,11 +6,11 @@ import de.dhbw.nerdlegame.player.PlayerName;
 
 import java.util.UUID;
 
-public class ConcreteSocketObserver implements SocketObserver {
+public class SocketConnectionObserverImpl implements ServerConnectionObserver {
 
     private NerdleGame nerdleGame;
 
-    public ConcreteSocketObserver(final NerdleGame nerdleGame) {
+    public SocketConnectionObserverImpl(final NerdleGame nerdleGame) {
         this.nerdleGame = nerdleGame;
     }
 

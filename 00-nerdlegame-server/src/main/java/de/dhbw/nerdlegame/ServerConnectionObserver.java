@@ -1,5 +1,5 @@
 package de.dhbw.nerdlegame;
 
-public interface SocketObserver {
+public interface ServerConnectionObserver {
     void onClientConnected();
 }

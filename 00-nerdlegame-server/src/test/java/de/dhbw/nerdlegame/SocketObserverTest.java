@@ -11,7 +11,7 @@ public class SocketObserverTest {
     @Test
     public void test() {
         final NerdleGame nerdleGame = mock(NerdleGame.class);
-        final ConcreteSocketObserver concreteSocketObserver = new ConcreteSocketObserver(nerdleGame);
+        final SocketConnectionObserverImpl concreteSocketObserver = new SocketConnectionObserverImpl(nerdleGame);
         concreteSocketObserver.onClientConnected();
         verify(nerdleGame).registerPlayer(any());
     }

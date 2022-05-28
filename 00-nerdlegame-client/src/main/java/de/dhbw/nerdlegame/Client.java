@@ -1,40 +1,23 @@
 package de.dhbw.nerdlegame;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.Socket;
 
 public class Client {
 
-    public Client(final String address, final int port) {
-        DataOutputStream outputStream = null;
-        DataInputStream inputStream = null;
-        Socket socket = null;
-        try {
-            socket = new Socket(address, port);
-            System.out.println("Connected");
-            inputStream = new DataInputStream(System.in);
-            outputStream = new DataOutputStream(socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Client(final String address, final int port) throws IOException {
+        final Socket socket = new Socket(address, port);
+        final ServerConnection serverConnection = new ServerConnection(socket);
+        final BufferedReader commandLine = new BufferedReader(new InputStreamReader(System.in));
+        final PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        new Thread(serverConnection).start();
+        while (true) {
+            String command = commandLine.readLine();
+            if(command.equals("quit")) break;
+            out.println(command);
         }
-        String line = "";
-        while(!line.equals("Over")) {
-            try {
-                line = inputStream.readLine();
-                outputStream.writeUTF(line);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        try {
-            inputStream.close();
-            outputStream.close();
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        socket.close();
+        System.exit(0);
     }
 
 }
