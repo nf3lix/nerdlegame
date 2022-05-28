@@ -1,7 +1,10 @@
 package de.dhbw.nerdlegame.server;
 
-import de.dhbw.nerdlegame.ClientHandlerObserver;
 import de.dhbw.nerdlegame.GameStateException;
+import de.dhbw.nerdlegame.ServerConnectionObserver;
+import de.dhbw.nerdlegame.calculation.Calculation;
+import de.dhbw.nerdlegame.guess.Guess;
+import de.dhbw.nerdlegame.player.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,16 +12,19 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class ClientHandler implements Runnable {
 
+    private final Player player;
     private final Socket client;
     private final BufferedReader in;
     private final PrintWriter out;
     private ArrayList<ClientHandler> clients;
-    private final ClientHandlerObserver observer;
+    private final ServerConnectionObserver observer;
 
-    public ClientHandler(final Socket socket, final ArrayList<ClientHandler> clients, final ClientHandlerObserver observer) throws IOException {
+    public ClientHandler(final Player player, final Socket socket, final ArrayList<ClientHandler> clients, final ServerConnectionObserver observer) throws IOException {
+        this.player = player;
         this.observer = observer;
         this.client = socket;
         this.clients = clients;
@@ -34,7 +40,7 @@ public class ClientHandler implements Runnable {
                 System.out.println(request);
                 if(request.startsWith("guess")) {
                     try {
-                        observer.onGuess(request.split(" ")[1]);
+                        observer.onGuess(new Guess(UUID.randomUUID(), player, new Calculation(request.split(" ")[1])));
                     } catch (GameStateException e) {
                         this.out.println("Guessing has not started yet");
                     }
