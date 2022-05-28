@@ -11,9 +11,11 @@ public class ServerConnection implements Runnable {
     private final Socket server;
     private final BufferedReader in;
     private final PrintWriter out;
+    private final ConnectionObserver observer;
 
-    public ServerConnection(final Socket server) throws IOException {
+    public ServerConnection(final Socket server, final ConnectionObserver observer) throws IOException {
         this.server = server;
+        this.observer = observer;
         this.in = new BufferedReader(new InputStreamReader(server.getInputStream()));
         this.out = new PrintWriter(server.getOutputStream(), true);
     }
@@ -25,7 +27,7 @@ public class ServerConnection implements Runnable {
             while (true) {
                 serverResponse = in.readLine();
                 if(serverResponse == null) break;
-                System.out.println(serverResponse);
+                observer.receiveMessage(serverResponse);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -30,6 +30,10 @@ public class GuessResultResource {
         this.digitResults = guessResult.getDigitResults();
     }
 
+    public GuessDigitResult[] getDigitResults() {
+        return digitResults;
+    }
+
     @Override
     public String toString() {
         final StringBuilder stringBuilder = new StringBuilder();

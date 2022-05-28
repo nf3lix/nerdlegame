@@ -7,7 +7,7 @@ public class GuessResult {
 
     private final GuessDigitResult[] digitResults;
 
-    private GuessResult(final GuessDigitResult[] digitResults) {
+    public GuessResult(final GuessDigitResult[] digitResults) {
         this.digitResults = digitResults;
     }
 

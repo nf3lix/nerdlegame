@@ -7,9 +7,9 @@ import java.net.Socket;
 
 public class Client {
 
-    public Client(final String address, final int port) throws IOException {
+    public Client(final String address, final int port, final ConnectionObserver observer) throws IOException {
         final Socket socket = new Socket(address, port);
-        final ServerConnection serverConnection = new ServerConnection(socket);
+        final ServerConnection serverConnection = new ServerConnection(socket, observer);
         final BufferedReader commandLine = new BufferedReader(new InputStreamReader(System.in));
         final PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         new Thread(serverConnection).start();

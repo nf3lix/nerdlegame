@@ -2,12 +2,11 @@ package de.dhbw.nerdlegame.resource;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.GuessResult;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static de.dhbw.nerdlegame.resource.GuessResultResourceMatcher.hasStringRepresentation;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GuessResultResourceTest {
 
