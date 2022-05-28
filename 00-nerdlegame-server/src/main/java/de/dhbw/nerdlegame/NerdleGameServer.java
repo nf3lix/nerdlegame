@@ -1,5 +1,6 @@
 package de.dhbw.nerdlegame;
 
+import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.server.Server;
 
 import java.io.IOException;
@@ -12,7 +13,8 @@ public class NerdleGameServer {
         final NerdleGame nerdleGame = new NerdleGame(new CalculationGeneratorImpl());
         nerdleGame.addGameStateChangedListener(gameState -> logMessage("GameState changed: " + gameState.name()));
         final ServerConnectionObserver socketObserver = new ServerConnectionObserverImpl(nerdleGame);
-        final Server server = new Server(5000, socketObserver);
+        final Server server = new Server(5000, socketObserver, nerdleGame);
+        //nerdleGame.addWinnerDeterminedListener(player -> server.broadCastMessage(new Message("GAMESTATE", player + " win")));
     }
 
     public static void logMessage(final String message) {

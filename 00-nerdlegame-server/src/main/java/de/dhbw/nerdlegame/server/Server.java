@@ -2,6 +2,7 @@ package de.dhbw.nerdlegame.server;
 
 import de.dhbw.nerdlegame.NerdleGame;
 import de.dhbw.nerdlegame.ServerConnectionObserver;
+import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.player.Player;
 import de.dhbw.nerdlegame.player.PlayerId;
 import de.dhbw.nerdlegame.player.PlayerName;
@@ -21,7 +22,8 @@ public class Server {
     private final ServerSocket server;
     private final ServerConnectionObserver socketObserver;
 
-    public Server(final int port, final ServerConnectionObserver serverObserver) throws IOException {
+    public Server(final int port, final ServerConnectionObserver serverObserver, final NerdleGame nerdleGame) throws IOException {
+        nerdleGame.addWinnerDeterminedListener(player -> broadCastMessage(new Message("GAMESTATE", player.playerName() + " win")));
         this.socketObserver = serverObserver;
         this.server = new ServerSocket(port);
         int connectedPlayerCont = 0;
@@ -38,6 +40,10 @@ public class Server {
         clients.add(clientHandler);
         pool.execute(clientHandler);
         socketObserver.onPlayerJoined(player);
+    }
+
+    public void broadCastMessage(final Message message) {
+        clients.forEach(client -> client.sendMessage(message));
     }
 
 }

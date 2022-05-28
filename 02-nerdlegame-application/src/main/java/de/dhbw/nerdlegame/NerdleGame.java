@@ -42,6 +42,7 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
         }
         final GuessResult result = GuessResult.createFromGuess(calculation, guess.calculation());
         if(result.isCorrect()) {
+            System.out.println(true);
             gameState.nextState();
             notifyGameStateObservers();
             notifyWinnerDeterminedObservers(guess.player());
