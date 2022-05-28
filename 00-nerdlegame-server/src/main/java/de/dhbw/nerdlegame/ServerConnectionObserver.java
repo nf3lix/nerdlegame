@@ -5,5 +5,5 @@ import de.dhbw.nerdlegame.player.Player;
 
 public interface ServerConnectionObserver {
     void onPlayerJoined(Player player);
-    void onGuess(Guess guess);
+    void onGuess(Receiver receiver, Guess guess);
 }

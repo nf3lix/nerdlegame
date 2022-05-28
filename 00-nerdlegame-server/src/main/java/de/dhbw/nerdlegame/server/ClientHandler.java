@@ -1,6 +1,7 @@
 package de.dhbw.nerdlegame.server;
 
 import de.dhbw.nerdlegame.GameStateException;
+import de.dhbw.nerdlegame.Receiver;
 import de.dhbw.nerdlegame.ServerConnectionObserver;
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.Guess;
@@ -14,7 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.UUID;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler implements Runnable, Receiver {
 
     private final Player player;
     private final Socket client;
@@ -40,7 +41,7 @@ public class ClientHandler implements Runnable {
                 System.out.println(request);
                 if(request.startsWith("guess")) {
                     try {
-                        observer.onGuess(new Guess(UUID.randomUUID(), player, new Calculation(request.split(" ")[1])));
+                        observer.onGuess(this, new Guess(UUID.randomUUID(), player, new Calculation(request.split(" ")[1])));
                     } catch (GameStateException e) {
                         this.out.println("Guessing has not started yet");
                     }
@@ -60,6 +61,11 @@ public class ClientHandler implements Runnable {
 
     private void broadcast(final String message) {
         clients.forEach(client -> client.out.println(message));
+    }
+
+    @Override
+    public void sendMessage(final String message) {
+        out.println(message);
     }
 
 }

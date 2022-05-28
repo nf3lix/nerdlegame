@@ -36,7 +36,7 @@ public class GuessResultMatcher extends TypeSafeMatcher<GuessResult> {
     protected boolean matchesSafely(final GuessResult guessResult) {
         final List<Integer> actualMatchingIds = new ArrayList<>();
         for(int index = 0; index < Calculation.NUMBER_OF_DIGITS; index++) {
-            if(guessResult.resultAt(index).digitResult() == digitResult) {
+            if(guessResult.resultAt(index).resultType() == digitResult) {
                 actualMatchingIds.add(index);
             }
         }
@@ -67,7 +67,7 @@ public class GuessResultMatcher extends TypeSafeMatcher<GuessResult> {
     protected void describeMismatchSafely(GuessResult item, Description mismatchDescription) {
         mismatchDescription.appendText("has " + digitResult.name() + " at ");
         for(int index = 0; index < Calculation.NUMBER_OF_DIGITS; index++) {
-            if(item.resultAt(index).digitResult() == digitResult) {
+            if(item.resultAt(index).resultType() == digitResult) {
                 mismatchDescription.appendValue(index);
             }
         }

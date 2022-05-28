@@ -16,7 +16,7 @@ public class GuessDigitResult {
         return guessedDigit;
     }
 
-    public DigitResultType digitResult() {
+    public DigitResultType resultType() {
         return digitResult;
     }
 
