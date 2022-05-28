@@ -20,6 +20,9 @@ public class NerdleGame implements GameStateObservable {
 
     public NerdleGame(final CalculationGenerator generator) {
         this.calculation = generator.nextCalculation();
+        for(int i = 0; i < 8; i++) {
+            System.out.println(calculation.getDigit(i));
+        }
     }
 
     public void registerPlayer(final Player player) {
