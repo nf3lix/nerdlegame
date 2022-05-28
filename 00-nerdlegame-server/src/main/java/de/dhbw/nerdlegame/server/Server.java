@@ -23,14 +23,12 @@ public class Server {
         this.server = new ServerSocket(port);
         int connectedPlayerCont = 0;
         while (connectedPlayerCont <= NerdleGame.MAX_PLAYERS) {
-            System.out.println("Waiting for clients...");
             final Socket client = server.accept();
             connectedPlayerCont++;
-            socketObserver.onClientConnected();
-            System.out.println("Client connected...");
             final ClientHandler clientHandler = new ClientHandler(client, clients, clientObserver);
             clients.add(clientHandler);
             pool.execute(clientHandler);
+            socketObserver.onClientConnected();
         }
     }
 

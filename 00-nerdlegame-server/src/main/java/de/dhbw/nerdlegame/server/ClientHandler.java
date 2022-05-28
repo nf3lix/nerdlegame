@@ -1,6 +1,7 @@
 package de.dhbw.nerdlegame.server;
 
 import de.dhbw.nerdlegame.ClientHandlerObserver;
+import de.dhbw.nerdlegame.GameStateException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,8 +31,14 @@ public class ClientHandler implements Runnable {
         try {
             while(true) {
                 final String request = in.readLine();
-                observer.guess(request);
-                broadcast("Player made a guess");
+                System.out.println(request);
+                if(request.startsWith("guess")) {
+                    try {
+                        observer.onGuess(request.split(" ")[1]);
+                    } catch (GameStateException e) {
+                        this.out.println("Guessing has not started yet");
+                    }
+                }
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());

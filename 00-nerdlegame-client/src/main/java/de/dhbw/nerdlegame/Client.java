@@ -1,5 +1,7 @@
 package de.dhbw.nerdlegame;
 
+import de.dhbw.nerdlegame.calculation.Calculation;
+
 import java.io.*;
 import java.net.Socket;
 
@@ -14,7 +16,10 @@ public class Client {
         while (true) {
             String command = commandLine.readLine();
             if(command.equals("quit")) break;
-            out.println(command);
+            if(command.startsWith("guess ")) {
+                new Calculation(command.split(" ")[1]);
+                out.println(command);
+            }
         }
         socket.close();
         System.exit(0);

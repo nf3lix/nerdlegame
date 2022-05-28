@@ -10,7 +10,7 @@ public class NerdleGameServer {
 
     public static void main(String[] args) throws IOException {
         final NerdleGame nerdleGame = new NerdleGame(new CalculationGeneratorImpl());
-        nerdleGame.addGameStateChangedListener(gameState -> System.out.println("GameState changed: " + gameState.name()));
+        nerdleGame.addGameStateChangedListener(gameState -> logMessage("GameState changed: " + gameState.name()));
         final SocketConnectionObserverImpl socketObserver = new SocketConnectionObserverImpl(nerdleGame);
         final ClientHandlerObserver clientObserver = new ClientHandlerObserverImpl(nerdleGame);
         final Server server = new Server(5000, socketObserver, clientObserver);

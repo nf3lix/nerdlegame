@@ -15,8 +15,15 @@ public class SocketConnectionObserverImpl implements ServerConnectionObserver {
     }
 
     @Override
+    public void onWaitingForClients() {
+        NerdleGameServer.logMessage("Waiting for players...");
+    }
+
+    @Override
     public void onClientConnected() {
-        nerdleGame.registerPlayer(new Player(nextPlayerId(), nextPlayerName()));
+        final PlayerName playerName = nextPlayerName();
+        NerdleGameServer.logMessage(playerName + " joined the game");
+        nerdleGame.registerPlayer(new Player(nextPlayerId(), playerName));
     }
 
     private PlayerId nextPlayerId() {
@@ -24,7 +31,7 @@ public class SocketConnectionObserverImpl implements ServerConnectionObserver {
     }
 
     private PlayerName nextPlayerName() {
-        return new PlayerName("Player" + nerdleGame.currentPlayerCount());
+        return new PlayerName("Player" + (nerdleGame.currentPlayerCount() + 1));
     }
 
 }
