@@ -21,6 +21,15 @@ public class GuessResult {
         return new GuessResult(digitResults);
     }
 
+    public boolean isCorrect() {
+        for(final GuessDigitResult digitResult : digitResults) {
+            if(digitResult.resultType() != DigitResultType.CORRECT) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public GuessDigitResult[] getDigitResults() {
         return digitResults;
     }

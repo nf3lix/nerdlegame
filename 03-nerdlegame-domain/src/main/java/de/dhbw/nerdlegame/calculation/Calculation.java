@@ -47,6 +47,15 @@ public final class Calculation {
     }
 
     @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        for(CalculationDigit digit : digits) {
+            builder.append(digit.name());
+        }
+        return builder.toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

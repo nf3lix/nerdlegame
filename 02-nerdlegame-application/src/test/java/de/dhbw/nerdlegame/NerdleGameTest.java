@@ -32,6 +32,21 @@ public class NerdleGameTest {
         verify(generator).nextCalculation();
     }
 
+    @Test
+    public void notifyWinnerDeterminedListener() {
+        final String calculation = "12+35=47";
+        final NerdleGame nerdleGame = new NerdleGame(calculationGenerator(calculation));
+        final DetermineWinnerObserver observer = mock(DetermineWinnerObserver.class);
+        nerdleGame.addWinnerDeterminedListener(observer);
+        registerAllPlayers(nerdleGame);
+        final Guess guess = mock(Guess.class);
+        final Player player = mock(Player.class);
+        when(guess.calculation()).thenReturn(new Calculation(calculation));
+        when(guess.player()).thenReturn(player);
+        nerdleGame.makeGuess(guess);
+        verify(observer).onWinnerDetermined(player);
+    }
+
     private void registerAllPlayers(final NerdleGame nerdleGame) {
         for(int playerCount = 0; playerCount < NerdleGame.MAX_PLAYERS; playerCount++) {
             nerdleGame.registerPlayer(mock(Player.class));
@@ -41,6 +56,12 @@ public class NerdleGameTest {
     private CalculationGenerator calculationGenerator() {
         final CalculationGenerator generator = mock(CalculationGenerator.class);
         when(generator.nextCalculation()).thenReturn(new Calculation("12+35=47"));
+        return generator;
+    }
+
+    private CalculationGenerator calculationGenerator(final String calculation) {
+        final CalculationGenerator generator = mock(CalculationGenerator.class);
+        when(generator.nextCalculation()).thenReturn(new Calculation(calculation));
         return generator;
     }
 

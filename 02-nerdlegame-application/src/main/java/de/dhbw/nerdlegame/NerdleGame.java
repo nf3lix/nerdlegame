@@ -10,19 +10,19 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class NerdleGame implements GameStateObservable {
+public class NerdleGame implements GameStateObservable, DetermineWinnerObservable {
 
     private final List<Player> players = new ArrayList<>();
+
     private final Set<GameStateObserver> gameStateObservers = new HashSet<>();
+    private final Set<DetermineWinnerObserver> determineWinnerObservers = new HashSet<>();
+
     public static final int MAX_PLAYERS = 2;
     private GameState gameState = GameState.WAIT_FOR_PLAYERS;
     private final Calculation calculation;
 
     public NerdleGame(final CalculationGenerator generator) {
         this.calculation = generator.nextCalculation();
-        for(int i = 0; i < 8; i++) {
-            System.out.println(calculation.getDigit(i));
-        }
     }
 
     public void registerPlayer(final Player player) {
@@ -40,6 +40,12 @@ public class NerdleGame implements GameStateObservable {
         if(gameState != GameState.GUESSING) {
             throw new GameStateException("Guesses can only be made during " + GameState.GUESSING.name() + " state. Current state is " + gameState.name());
         }
+        final GuessResult result = GuessResult.createFromGuess(calculation, guess.calculation());
+        if(result.isCorrect()) {
+            gameState.nextState();
+            notifyGameStateObservers();
+            notifyWinnerDeterminedObservers(guess.player());
+        }
         return GuessResult.createFromGuess(calculation, guess.calculation());
     }
 
@@ -55,5 +61,15 @@ public class NerdleGame implements GameStateObservable {
     @Override
     public void notifyGameStateObservers() {
         gameStateObservers.forEach(observer -> observer.onGameStateChanged(gameState));
+    }
+
+    @Override
+    public void addWinnerDeterminedListener(final DetermineWinnerObserver observer) {
+        determineWinnerObservers.add(observer);
+    }
+
+    @Override
+    public void notifyWinnerDeterminedObservers(final Player player) {
+        determineWinnerObservers.forEach(observer -> observer.onWinnerDetermined(player));
     }
 }

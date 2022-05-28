@@ -17,8 +17,13 @@ public class Guess {
         this.guess = calculation;
     }
 
+    public Player player() {
+        return player;
+    }
+
     public boolean matches(final Calculation calculation) {
-        return this.guess.equals(calculation);
+        System.out.println(calculation().equals(calculation));
+        return calculation().equals(calculation);
     }
 
     public Calculation calculation() {
