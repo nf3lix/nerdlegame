@@ -5,6 +5,7 @@ import de.dhbw.nerdlegame.Receiver;
 import de.dhbw.nerdlegame.ServerConnectionObserver;
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.Guess;
+import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.player.Player;
 
 import java.io.BufferedReader;
@@ -64,8 +65,8 @@ public class ClientHandler implements Runnable, Receiver {
     }
 
     @Override
-    public void sendMessage(final String message) {
-        out.println(message);
+    public void sendMessage(final Message message) {
+        out.println(message.toString());
     }
 
 }
