@@ -10,16 +10,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class GuessResultTest {
 
     @Test
-    public void getGuessResult() {
-        final Calculation calculation = new Calculation("21+14=35");
-        final Calculation guess = new Calculation("22+34=56");
-        final GuessResult guessResult = GuessResult.createFromGuess(calculation, guess);
-        for (int i = 0; i < Calculation.NUMBER_OF_DIGITS; i++) {
-            System.out.println(guessResult.getDigitResults()[i].digitResult().name());
-        }
-    }
-
-    @Test
     public void getCorrectResultForDigits() {
         final Calculation calculation = new Calculation("21+14=35");
         final Calculation guess =       new Calculation("22+34=56");

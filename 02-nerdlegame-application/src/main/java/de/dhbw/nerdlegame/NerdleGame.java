@@ -6,12 +6,15 @@ import de.dhbw.nerdlegame.guess.GuessResult;
 import de.dhbw.nerdlegame.player.Player;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class NerdleGame {
+public class NerdleGame implements GameStateObservable {
 
-    public static final int MAX_PLAYERS = 2;
     private final List<Player> players = new ArrayList<>();
+    private final Set<GameStateObserver> gameStateObservers = new HashSet<>();
+    public static final int MAX_PLAYERS = 2;
     private GameState gameState = GameState.WAIT_FOR_PLAYERS;
     private final Calculation calculation;
 
@@ -26,6 +29,7 @@ public class NerdleGame {
         players.add(player);
         if(players.size() == MAX_PLAYERS) {
             gameState = gameState.nextState();
+            notifyGameStateObservers();
         }
     }
 
@@ -40,4 +44,13 @@ public class NerdleGame {
         return players.size();
     }
 
+    @Override
+    public void addGameStateChangedListener(GameStateObserver observer) {
+        this.gameStateObservers.add(observer);
+    }
+
+    @Override
+    public void notifyGameStateObservers() {
+        gameStateObservers.forEach(observer -> observer.onGameStateChanged(gameState));
+    }
 }
