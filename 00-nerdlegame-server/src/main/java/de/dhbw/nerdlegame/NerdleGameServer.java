@@ -12,7 +12,9 @@ public class NerdleGameServer {
         final NerdleGame nerdleGame = new NerdleGame(new CalculationGeneratorImpl(), new GameTimerImpl());
         nerdleGame.addGameStateChangedListener(gameState -> logMessage("GameState changed: " + gameState.name()));
         final ServerConnectionObserver socketObserver = new ServerConnectionObserverImpl(nerdleGame);
-        final Server server = new Server(5000, socketObserver, nerdleGame);
+        final Server server = new Server(5000, socketObserver);
+        server.addClientConnectedListener(new GameQueue());
+        server.start();
     }
 
     public static void logMessage(final String message) {

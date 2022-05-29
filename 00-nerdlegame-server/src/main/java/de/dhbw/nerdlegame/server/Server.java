@@ -1,50 +1,51 @@
 package de.dhbw.nerdlegame.server;
 
+import de.dhbw.nerdlegame.ClientConnectedObservable;
+import de.dhbw.nerdlegame.ClientConnectedObserver;
 import de.dhbw.nerdlegame.NerdleGame;
 import de.dhbw.nerdlegame.ServerConnectionObserver;
-import de.dhbw.nerdlegame.message.Message;
-import de.dhbw.nerdlegame.message.MessageType;
-import de.dhbw.nerdlegame.player.Player;
-import de.dhbw.nerdlegame.player.PlayerId;
-import de.dhbw.nerdlegame.player.PlayerName;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class Server {
+public class Server implements ClientConnectedObservable {
 
-    private final ArrayList<ClientHandler> clients = new ArrayList<>();
     private final ExecutorService pool = Executors.newCachedThreadPool();
     private final ServerSocket server;
     private final ServerConnectionObserver socketObserver;
+    private final Set<ClientConnectedObserver> clientConnectedObservers = new HashSet<>();
 
-    public Server(final int port, final ServerConnectionObserver serverObserver, final NerdleGame nerdleGame) throws IOException {
-        nerdleGame.addWinnerDeterminedListener(player -> broadCastMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses")));
+    public Server(final int port, final ServerConnectionObserver serverObserver) throws IOException {
         this.socketObserver = serverObserver;
         this.server = new ServerSocket(port);
-        int connectedPlayerCont = 0;
-        while (connectedPlayerCont <= NerdleGame.MAX_PLAYERS) {
-            connectedPlayerCont++;
-            registerPlayer("Player" + connectedPlayerCont);
+    }
+
+    public void start() throws IOException {
+        while (true) {
+            registerPlayer();
         }
     }
 
-    private void registerPlayer(final String playerName) throws IOException {
+    private void registerPlayer() throws IOException {
         final Socket client = server.accept();
-        final Player player = new Player(new PlayerId(UUID.randomUUID()), new PlayerName(playerName));
-        final ClientHandler clientHandler = new ClientHandler(player, client, clients, socketObserver);
-        clients.add(clientHandler);
+        final ClientHandler clientHandler = new ClientHandler(client, socketObserver);
+        notifyClientConnectedListeners(clientHandler);
         pool.execute(clientHandler);
-        socketObserver.onPlayerJoined(player);
     }
 
-    public void broadCastMessage(final Message message) {
-        clients.forEach(client -> client.sendMessage(message));
+    @Override
+    public void addClientConnectedListener(final ClientConnectedObserver observer) {
+        this.clientConnectedObservers.add(observer);
+    }
+
+    @Override
+    public void notifyClientConnectedListeners(final ClientHandler clientHandler) {
+        clientConnectedObservers.forEach(observer -> observer.onClientConnected(clientHandler, socketObserver));
     }
 
 }

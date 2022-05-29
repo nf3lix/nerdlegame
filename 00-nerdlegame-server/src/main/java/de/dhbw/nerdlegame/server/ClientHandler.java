@@ -1,35 +1,28 @@
 package de.dhbw.nerdlegame.server;
 
-import de.dhbw.nerdlegame.GameStateException;
 import de.dhbw.nerdlegame.Receiver;
 import de.dhbw.nerdlegame.ServerConnectionObserver;
-import de.dhbw.nerdlegame.calculation.Calculation;
-import de.dhbw.nerdlegame.guess.Guess;
 import de.dhbw.nerdlegame.message.Message;
-import de.dhbw.nerdlegame.player.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Set;
 
-public class ClientHandler implements Runnable, Receiver {
+public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver {
 
-    private final Player player;
     private final Socket client;
     private final BufferedReader in;
     private final PrintWriter out;
-    private ArrayList<ClientHandler> clients;
     private final ServerConnectionObserver observer;
+    private final Set<ClientMessageObserver> clientMessageObservers = new HashSet<>();
 
-    public ClientHandler(final Player player, final Socket socket, final ArrayList<ClientHandler> clients, final ServerConnectionObserver observer) throws IOException {
-        this.player = player;
+    public ClientHandler(final Socket socket, final ServerConnectionObserver observer) throws IOException {
         this.observer = observer;
         this.client = socket;
-        this.clients = clients;
         this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         this.out = new PrintWriter(client.getOutputStream(), true);
     }
@@ -39,14 +32,7 @@ public class ClientHandler implements Runnable, Receiver {
         try {
             while(true) {
                 final String request = in.readLine();
-                System.out.println(request);
-                if(request.startsWith("guess")) {
-                    try {
-                        observer.onGuess(this, new Guess(UUID.randomUUID(), player, new Calculation(request.split(" ")[1])));
-                    } catch (GameStateException e) {
-                        this.out.println("Guessing has not started yet");
-                    }
-                }
+                notifyClientMessageObservers(request);
             }
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -60,13 +46,18 @@ public class ClientHandler implements Runnable, Receiver {
         }
     }
 
-    private void broadcast(final String message) {
-        clients.forEach(client -> client.out.println(message));
-    }
-
     @Override
     public void sendMessage(final Message message) {
         out.println(message.toString());
     }
 
+    @Override
+    public void addClientMessageObserver(final ClientMessageObserver observer) {
+        clientMessageObservers.add(observer);
+    }
+
+    @Override
+    public void notifyClientMessageObservers(final String message) {
+        clientMessageObservers.forEach(observer -> observer.onClientMessageReceived(message));
+    }
 }

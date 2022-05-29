@@ -2,10 +2,7 @@ package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.message.MessageType;
-import de.dhbw.nerdlegame.response_action.DisplayErrorMessage;
-import de.dhbw.nerdlegame.response_action.DisplayGameStateChanged;
-import de.dhbw.nerdlegame.response_action.DisplayGuessResult;
-import de.dhbw.nerdlegame.response_action.OnResponseAction;
+import de.dhbw.nerdlegame.response_action.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +17,7 @@ public class ConnectionObserverImpl implements ConnectionObserver {
         actions.put(PLAYER_WINS, new DisplayGameStateChanged());
         actions.put(GUESS_RESULT, new DisplayGuessResult());
         actions.put(TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, new DisplayErrorMessage());
+        actions.put(GUESSING_NOT_STARTED_YET, new DisplayGuessingNotStartedYet());
     }
 
     @Override
