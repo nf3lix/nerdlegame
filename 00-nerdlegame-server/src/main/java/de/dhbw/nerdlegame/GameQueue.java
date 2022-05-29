@@ -18,13 +18,13 @@ public class GameQueue implements ClientConnectedObserver {
 
     @Override
     public void onClientConnected(final ClientHandler clientHandler) {
-        log("Client connected");
+        log("Player joined game queue");
         queue.add(clientHandler);
         if(queue.size() >= NerdleGame.MAX_PLAYERS) {
             startNewGame();
             return;
         }
-        log("Clients in queue: " + queue.size() + "; Clients in game: " + clientsInGame.size());
+        log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
     }
 
     private void startNewGame() {
@@ -38,11 +38,14 @@ public class GameQueue implements ClientConnectedObserver {
             clients.put(clientHandler, player);
             clientHandler.addClientMessageObserver(new ClientMessageObserverImpl(clientHandler, player, nerdleGame));
         }
-        nerdleGame.addWinnerDeterminedListener(player -> {
-            clients.keySet().forEach(client -> client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses")));
-        });
+        nerdleGame.addWinnerDeterminedListener(player -> clients.keySet().forEach(client -> {
+            client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses"));
+            clientsInGame.remove(client);
+            client.closeConnection();
+            log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
+        }));
         clients.keySet().forEach(client -> clientsInGame.put(client, nerdleGame));
-        log("Clients in queue: " + queue.size() + "; Clients in game: " + clientsInGame.size());
+        log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
     }
 
     private void log(final String logMessage) {

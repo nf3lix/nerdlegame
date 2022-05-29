@@ -32,7 +32,7 @@ public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver 
                 notifyClientMessageObservers(request);
             }
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            Server.log(e.getMessage());
         } finally {
             out.close();
             try {
@@ -40,6 +40,14 @@ public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver 
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public void closeConnection() {
+        try {
+            this.client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
