@@ -23,6 +23,14 @@ public class Message {
         this.content = content.toString();
     }
 
+    public Message(final MessageType messageType, final Object content) {
+        if(content.toString().contains(separator)) {
+            throw new MalformedMessage("Content must not contain separator '" + separator + "'");
+        }
+        this.prefix = messageType.name();
+        this.content = content.toString();
+    }
+
     public String getPrefix() {
         return prefix;
     }
