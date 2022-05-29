@@ -5,10 +5,7 @@ import de.dhbw.nerdlegame.guess.Guess;
 import de.dhbw.nerdlegame.guess.GuessResult;
 import de.dhbw.nerdlegame.player.Player;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class NerdleGame implements GameStateObservable, DetermineWinnerObservable {
 
@@ -16,6 +13,7 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
 
     private final Set<GameStateObserver> gameStateObservers = new HashSet<>();
     private final Set<DetermineWinnerObserver> determineWinnerObservers = new HashSet<>();
+    private final Map<Player, Integer> guesses = new HashMap<>();
 
     public static final int MAX_PLAYERS = 2;
     private GameState gameState = GameState.WAIT_FOR_PLAYERS;
@@ -30,6 +28,7 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
             throw new GameStateException("Players can only be registered in " + GameState.WAIT_FOR_PLAYERS.name() + " state. Current state is " + gameState.name());
         }
         players.add(player);
+        guesses.put(player, 0);
         if(players.size() == MAX_PLAYERS) {
             gameState = gameState.nextState();
             notifyGameStateObservers();
@@ -40,6 +39,7 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
         if(gameState != GameState.GUESSING) {
             throw new GameStateException("Guesses can only be made during " + GameState.GUESSING.name() + " state. Current state is " + gameState.name());
         }
+        guesses.put(guess.player(), guesses.get(guess.player()) + 1);
         final GuessResult result = GuessResult.createFromGuess(calculation, guess.calculation());
         if(result.isCorrect()) {
             System.out.println(true);
@@ -50,8 +50,8 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
         return GuessResult.createFromGuess(calculation, guess.calculation());
     }
 
-    public int currentPlayerCount() {
-        return players.size();
+    public int amountOfGuesses(final Player player) {
+        return guesses.get(player);
     }
 
     @Override

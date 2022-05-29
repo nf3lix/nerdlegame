@@ -24,7 +24,7 @@ public class Server {
     private final ServerConnectionObserver socketObserver;
 
     public Server(final int port, final ServerConnectionObserver serverObserver, final NerdleGame nerdleGame) throws IOException {
-        nerdleGame.addWinnerDeterminedListener(player -> broadCastMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " win")));
+        nerdleGame.addWinnerDeterminedListener(player -> broadCastMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses")));
         this.socketObserver = serverObserver;
         this.server = new ServerSocket(port);
         int connectedPlayerCont = 0;
