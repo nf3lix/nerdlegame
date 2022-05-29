@@ -2,6 +2,7 @@ package de.dhbw.nerdlegame.message;
 
 import org.junit.jupiter.api.Test;
 
+import static de.dhbw.nerdlegame.message.MessageType.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -9,20 +10,19 @@ public class MessageTest {
 
     @Test
     public void createFromPrefixAndContent() {
-        final Message message = new Message("MESSAGE", "CONTENT");
-        assertEquals(message.toString(), "MESSAGE\u0590CONTENT");
+        final Message message = new Message(PLAYER_WINS, "CONTENT");
+        assertEquals(message.toString(), PLAYER_WINS.name() + "\u0590CONTENT");
     }
 
     @Test
     public void throwExceptionWhenMessageContainsSeparator() {
-        assertThrows(MalformedMessage.class, () -> new Message("MESSAGE\u0590", "CONTENT"));
-        assertThrows(MalformedMessage.class, () -> new Message("MESSAGE", "CONTENT\u0590"));
+        assertThrows(MalformedMessage.class, () -> new Message(PLAYER_WINS, "CONTENT\u0590"));
     }
 
     @Test
     public void createMessageObjectFromString() {
-        final Message message = new Message("MESSAGE\u0590CONTENT");
-        assertEquals(message.getPrefix(), "MESSAGE");
+        final Message message = new Message(PLAYER_WINS.name() + "\u0590CONTENT");
+        assertEquals(message.getMessageType(), PLAYER_WINS);
         assertEquals(message.getContent(), "CONTENT");
     }
 

@@ -11,17 +11,17 @@ import java.util.Map;
 
 public class ConnectionObserverImpl implements ConnectionObserver {
 
-    private final Map<String, OnResponseAction> actions = new HashMap<>();
+    private final Map<MessageType, OnResponseAction> actions = new HashMap<>();
 
     public ConnectionObserverImpl() {
-        actions.put("GAMESTATE", new DisplayGameStateChanged());
-        actions.put(MessageType.GUESS_RESULT.name(), new DisplayGuessResult());
+        actions.put(MessageType.PLAYER_WINS, new DisplayGameStateChanged());
+        actions.put(MessageType.GUESS_RESULT, new DisplayGuessResult());
     }
 
     @Override
     public void onMessageReceived(String content) {
         final Message message = new Message(content);
-        final OnResponseAction action = actions.get(message.getPrefix());
+        final OnResponseAction action = actions.get(message.getMessageType());
         action.run(message);
     }
 
