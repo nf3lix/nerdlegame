@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class ConnectionObserverImpl implements ConnectionObserver {
 
     @Override
-    public void receiveMessage(String content) {
+    public void onMessageReceived(String content) {
         final Message message = new Message(content);
         if(message.getPrefix().equals("GAMESTATE")) {
             System.out.println(message.getContent());

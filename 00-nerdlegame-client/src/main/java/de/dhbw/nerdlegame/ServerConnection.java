@@ -27,7 +27,7 @@ public class ServerConnection implements Runnable {
             while (true) {
                 serverResponse = in.readLine();
                 if(serverResponse == null) break;
-                observer.receiveMessage(serverResponse);
+                observer.onMessageReceived(serverResponse);
             }
         } catch (IOException e) {
             e.printStackTrace();
