@@ -13,14 +13,19 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
 
     private final Set<GameStateObserver> gameStateObservers = new HashSet<>();
     private final Set<DetermineWinnerObserver> determineWinnerObservers = new HashSet<>();
-    private final Map<Player, Integer> guesses = new HashMap<>();
+    private final Map<Player, Integer> amountOfGuesses = new HashMap<>();
+    private final Map<Player, Long> lastGuesses = new HashMap<>();
 
     public static final int MAX_PLAYERS = 2;
+    public static final int MIN_TIME_BETWEEN_GUESSES = 5 * 1000;
+
+    private final GameTimer gameTimer;
     private GameState gameState = GameState.WAIT_FOR_PLAYERS;
     private final Calculation calculation;
 
-    public NerdleGame(final CalculationGenerator generator) {
+    public NerdleGame(final CalculationGenerator generator, final GameTimer gameTimer) {
         this.calculation = generator.nextCalculation();
+        this.gameTimer = gameTimer;
     }
 
     public void registerPlayer(final Player player) {
@@ -28,7 +33,8 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
             throw new GameStateException("Players can only be registered in " + GameState.WAIT_FOR_PLAYERS.name() + " state. Current state is " + gameState.name());
         }
         players.add(player);
-        guesses.put(player, 0);
+        amountOfGuesses.put(player, 0);
+        lastGuesses.put(player, 0L);
         if(players.size() == MAX_PLAYERS) {
             gameState = gameState.nextState();
             notifyGameStateObservers();
@@ -39,7 +45,11 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
         if(gameState != GameState.GUESSING) {
             throw new GameStateException("Guesses can only be made during " + GameState.GUESSING.name() + " state. Current state is " + gameState.name());
         }
-        guesses.put(guess.player(), guesses.get(guess.player()) + 1);
+        if(gameTimer.currentTimeInMillis() - lastGuesses.get(guess.player()) < MIN_TIME_BETWEEN_GUESSES) {
+            throw new TooLittleTimeSinceLastGuess("You have to wait at least " + (MIN_TIME_BETWEEN_GUESSES / 1000) + "seconds until next guess");
+        }
+        lastGuesses.put(guess.player(), gameTimer.currentTimeInMillis());
+        amountOfGuesses.put(guess.player(), amountOfGuesses.get(guess.player()) + 1);
         final GuessResult result = GuessResult.createFromGuess(calculation, guess.calculation());
         if(result.isCorrect()) {
             System.out.println(true);
@@ -51,7 +61,7 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
     }
 
     public int amountOfGuesses(final Player player) {
-        return guesses.get(player);
+        return amountOfGuesses.get(player);
     }
 
     @Override

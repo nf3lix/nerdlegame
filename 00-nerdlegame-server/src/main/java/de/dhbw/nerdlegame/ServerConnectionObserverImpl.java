@@ -22,8 +22,12 @@ public class ServerConnectionObserverImpl implements ServerConnectionObserver {
 
     @Override
     public void onGuess(final Receiver receiver, final Guess guess) {
-        final GuessResult guessResult = game.makeGuess(guess);
-        receiver.sendMessage(new Message(MessageType.GUESS_RESULT, new GuessResultResource(guessResult).toString()));
+        try {
+            final GuessResult guessResult = game.makeGuess(guess);
+            receiver.sendMessage(new Message(MessageType.GUESS_RESULT, new GuessResultResource(guessResult).toString()));
+        } catch (TooLittleTimeSinceLastGuess e) {
+            receiver.sendMessage(new Message(MessageType.TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, e.getMessage()));
+        }
     }
 
 }
