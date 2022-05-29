@@ -2,8 +2,6 @@ package de.dhbw.nerdlegame.server;
 
 import de.dhbw.nerdlegame.ClientConnectedObservable;
 import de.dhbw.nerdlegame.ClientConnectedObserver;
-import de.dhbw.nerdlegame.NerdleGame;
-import de.dhbw.nerdlegame.ServerConnectionObserver;
 
 import java.io.IOException;
 import java.net.ServerSocket;

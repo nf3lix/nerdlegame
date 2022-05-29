@@ -35,7 +35,9 @@ public class ClientMessageObserverImpl implements ClientMessageObserver {
                 } catch (TooLittleTimeSinceLastGuess e) {
                     clientHandler.sendMessage(new Message(MessageType.TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, e.getMessage()));
                 }
-            } catch (GameStateException e) { }
+            } catch (GameStateException e) {
+                clientHandler.sendMessage(new Message(MessageType.GUESSING_NOT_STARTED_YET, e.getMessage()));
+            }
         }
     }
 
