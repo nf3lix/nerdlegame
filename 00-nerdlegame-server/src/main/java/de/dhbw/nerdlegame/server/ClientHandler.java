@@ -17,11 +17,9 @@ public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver 
     private final Socket client;
     private final BufferedReader in;
     private final PrintWriter out;
-    private final ServerConnectionObserver observer;
     private final Set<ClientMessageObserver> clientMessageObservers = new HashSet<>();
 
-    public ClientHandler(final Socket socket, final ServerConnectionObserver observer) throws IOException {
-        this.observer = observer;
+    public ClientHandler(final Socket socket) throws IOException {
         this.client = socket;
         this.in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         this.out = new PrintWriter(client.getOutputStream(), true);

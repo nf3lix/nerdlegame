@@ -17,11 +17,9 @@ public class Server implements ClientConnectedObservable {
 
     private final ExecutorService pool = Executors.newCachedThreadPool();
     private final ServerSocket server;
-    private final ServerConnectionObserver socketObserver;
     private final Set<ClientConnectedObserver> clientConnectedObservers = new HashSet<>();
 
-    public Server(final int port, final ServerConnectionObserver serverObserver) throws IOException {
-        this.socketObserver = serverObserver;
+    public Server(final int port) throws IOException {
         this.server = new ServerSocket(port);
     }
 
@@ -33,7 +31,7 @@ public class Server implements ClientConnectedObservable {
 
     private void registerPlayer() throws IOException {
         final Socket client = server.accept();
-        final ClientHandler clientHandler = new ClientHandler(client, socketObserver);
+        final ClientHandler clientHandler = new ClientHandler(client);
         notifyClientConnectedListeners(clientHandler);
         pool.execute(clientHandler);
     }
@@ -45,7 +43,7 @@ public class Server implements ClientConnectedObservable {
 
     @Override
     public void notifyClientConnectedListeners(final ClientHandler clientHandler) {
-        clientConnectedObservers.forEach(observer -> observer.onClientConnected(clientHandler, socketObserver));
+        clientConnectedObservers.forEach(observer -> observer.onClientConnected(clientHandler));
     }
 
 }
