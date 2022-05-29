@@ -1,6 +1,7 @@
 package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.message.Message;
+import de.dhbw.nerdlegame.message.MessageType;
 import de.dhbw.nerdlegame.response_action.DisplayGameStateChanged;
 import de.dhbw.nerdlegame.response_action.DisplayGuessResult;
 import de.dhbw.nerdlegame.response_action.OnResponseAction;
@@ -14,7 +15,7 @@ public class ConnectionObserverImpl implements ConnectionObserver {
 
     public ConnectionObserverImpl() {
         actions.put("GAMESTATE", new DisplayGameStateChanged());
-        actions.put("GUESS", new DisplayGuessResult());
+        actions.put(MessageType.GUESS_RESULT.name(), new DisplayGuessResult());
     }
 
     @Override
