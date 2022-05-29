@@ -1,27 +1,34 @@
 package de.dhbw.nerdlegame;
 
+import de.dhbw.nerdlegame.message.Message;
+import de.dhbw.nerdlegame.message.MessageType;
 import de.dhbw.nerdlegame.player.Player;
 import de.dhbw.nerdlegame.player.PlayerId;
 import de.dhbw.nerdlegame.player.PlayerName;
 import de.dhbw.nerdlegame.server.ClientHandler;
-import de.dhbw.nerdlegame.server.Game;
 
 import java.util.*;
 
 public class GameQueue implements ClientConnectedObserver {
 
+    private static final String LOG_PREFIX = "[GAME QUEUE]";
+
     private final Queue<ClientHandler> queue = new LinkedList<>();
-    private final Map<ClientHandler, Game> clientsInGame = new HashMap<>();
+    private final Map<ClientHandler, NerdleGame> clientsInGame = new HashMap<>();
 
     @Override
     public void onClientConnected(final ClientHandler clientHandler) {
+        log("Client connected");
         queue.add(clientHandler);
         if(queue.size() >= NerdleGame.MAX_PLAYERS) {
             startNewGame();
+            return;
         }
+        log("Clients in queue: " + queue.size() + "; Clients in game: " + clientsInGame.size());
     }
 
     private void startNewGame() {
+        log("Start new game...");
         final Map<ClientHandler, Player> clients = new HashMap<>();
         final NerdleGame nerdleGame = new NerdleGame(new CalculationGeneratorImpl(), new GameTimerImpl());
         for(int socketCount = 0; socketCount < NerdleGame.MAX_PLAYERS; socketCount++) {
@@ -31,8 +38,15 @@ public class GameQueue implements ClientConnectedObserver {
             clients.put(clientHandler, player);
             clientHandler.addClientMessageObserver(new ClientMessageObserverImpl(clientHandler, player, nerdleGame));
         }
-        final Game game = new Game(nerdleGame, clients);
-        clients.keySet().forEach(client -> clientsInGame.put(client, game));
+        nerdleGame.addWinnerDeterminedListener(player -> {
+            clients.keySet().forEach(client -> client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses")));
+        });
+        clients.keySet().forEach(client -> clientsInGame.put(client, nerdleGame));
+        log("Clients in queue: " + queue.size() + "; Clients in game: " + clientsInGame.size());
+    }
+
+    private void log(final String logMessage) {
+        System.out.println(LOG_PREFIX + " " + logMessage);
     }
 
 }

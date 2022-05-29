@@ -26,6 +26,9 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
     public NerdleGame(final CalculationGenerator generator, final GameTimer gameTimer) {
         this.calculation = generator.nextCalculation();
         this.gameTimer = gameTimer;
+        for(int i = 0; i < 8; i++) {
+            System.out.println(calculation.getDigit(i));
+        }
     }
 
     public void registerPlayer(final Player player) {
@@ -52,7 +55,6 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
         amountOfGuesses.put(guess.player(), amountOfGuesses.get(guess.player()) + 1);
         final GuessResult result = GuessResult.createFromGuess(calculation, guess.calculation());
         if(result.isCorrect()) {
-            System.out.println(true);
             gameState.nextState();
             notifyGameStateObservers();
             notifyWinnerDeterminedObservers(guess.player());
