@@ -11,12 +11,13 @@ import java.net.Socket;
 import java.util.HashSet;
 import java.util.Set;
 
-public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver {
+public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver, ClientConnectionClosedObservable {
 
     private final Socket client;
     private final BufferedReader in;
     private final PrintWriter out;
     private final Set<ClientMessageObserver> clientMessageObservers = new HashSet<>();
+    private final Set<ClientConnectionClosedObserver> clientConnectionClosedObservers = new HashSet<>();
 
     public ClientHandler(final Socket socket) throws IOException {
         this.client = socket;
@@ -34,6 +35,7 @@ public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver 
         } catch (IOException e) {
             Server.log(e.getMessage());
         } finally {
+            notifyClientConnectionClosedObservers();
             out.close();
             try {
                 in.close();
@@ -64,5 +66,15 @@ public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver 
     @Override
     public void notifyClientMessageObservers(final String message) {
         clientMessageObservers.forEach(observer -> observer.onClientMessageReceived(message));
+    }
+
+    @Override
+    public void addClientConnectionClosedListener(final ClientConnectionClosedObserver observer) {
+        clientConnectionClosedObservers.add(observer);
+    }
+
+    @Override
+    public void notifyClientConnectionClosedObservers() {
+        clientConnectionClosedObservers.forEach(ClientConnectionClosedObserver::onConnectionClosed);
     }
 }
