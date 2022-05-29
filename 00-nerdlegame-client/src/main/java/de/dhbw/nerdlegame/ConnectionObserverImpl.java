@@ -1,22 +1,27 @@
 package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.message.Message;
-import de.dhbw.nerdlegame.resource.GuessResultResource;
+import de.dhbw.nerdlegame.response_action.DisplayGameStateChanged;
+import de.dhbw.nerdlegame.response_action.DisplayGuessResult;
+import de.dhbw.nerdlegame.response_action.OnResponseAction;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ConnectionObserverImpl implements ConnectionObserver {
+
+    private final Map<String, OnResponseAction> actions = new HashMap<>();
+
+    public ConnectionObserverImpl() {
+        actions.put("GAMESTATE", new DisplayGameStateChanged());
+        actions.put("GUESS", new DisplayGuessResult());
+    }
 
     @Override
     public void onMessageReceived(String content) {
         final Message message = new Message(content);
-        if(message.getPrefix().equals("GAMESTATE")) {
-            System.out.println(message.getContent());
-            return;
-        }
-        final StringBuilder stringBuilder = new StringBuilder();
-        Arrays.stream(new GuessResultResource(message.getContent()).getDigitResults()).forEach(digit -> stringBuilder.append(digit.guessedDigit() + ": " + digit.resultType() + "; "));
-        System.out.println(stringBuilder);
+        final OnResponseAction action = actions.get(message.getPrefix());
+        action.run(message);
     }
 
 }
