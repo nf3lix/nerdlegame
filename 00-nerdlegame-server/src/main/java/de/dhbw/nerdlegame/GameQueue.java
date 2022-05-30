@@ -43,6 +43,7 @@ public class GameQueue implements ClientConnectedObserver {
         final ClientHandler clientHandler = queue.remove();
         final Player player = new Player(new PlayerId(UUID.randomUUID()), new PlayerName(playerName));
         nerdleGame.registerPlayer(player);
+        clientHandler.sendMessage(new Message(MessageType.GAME_STATE_CHANGED, "Game starts"));
         clients.put(clientHandler, player);
         clientHandler.addClientMessageObserver(new ClientMessageObserverImpl(clientHandler, player, nerdleGame));
         clientHandler.addClientConnectionClosedListener(() -> {
