@@ -2,6 +2,6 @@ package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.player.Player;
 
-public interface DetermineWinnerObserver {
+public interface OnWinObserver {
     void onWinnerDetermined(Player player);
 }

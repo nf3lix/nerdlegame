@@ -5,7 +5,6 @@ import de.dhbw.nerdlegame.message.MessageType;
 import de.dhbw.nerdlegame.player.Player;
 import de.dhbw.nerdlegame.player.PlayerId;
 import de.dhbw.nerdlegame.player.PlayerName;
-import de.dhbw.nerdlegame.server.ClientConnectionClosedObserver;
 import de.dhbw.nerdlegame.server.ClientHandler;
 
 import java.util.*;
@@ -43,14 +42,18 @@ public class GameQueue implements ClientConnectedObserver {
                 log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
             });
         }
-        nerdleGame.addWinnerDeterminedListener(player -> clients.keySet().forEach(client -> {
+        addOnWinListener(nerdleGame, clients);
+        clients.keySet().forEach(client -> clientsInGame.put(client, nerdleGame));
+        log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
+    }
+
+    private void addOnWinListener(final NerdleGame nerdleGame, final Map<ClientHandler, Player> clients) {
+        nerdleGame.addOnWinObserver(player -> clients.keySet().forEach(client -> {
             client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses"));
             clientsInGame.remove(client);
             client.closeConnection();
             log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
         }));
-        clients.keySet().forEach(client -> clientsInGame.put(client, nerdleGame));
-        log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
     }
 
     private void log(final String logMessage) {

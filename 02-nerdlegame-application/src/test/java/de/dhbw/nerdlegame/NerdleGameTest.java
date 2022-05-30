@@ -37,8 +37,8 @@ public class NerdleGameTest {
     public void notifyWinnerDeterminedListener() {
         final String calculation = "12+35=47";
         final NerdleGame nerdleGame = new NerdleGame(calculationGenerator(calculation), gameTimer());
-        final DetermineWinnerObserver observer = mock(DetermineWinnerObserver.class);
-        nerdleGame.addWinnerDeterminedListener(observer);
+        final OnWinObserver observer = mock(OnWinObserver.class);
+        nerdleGame.addOnWinObserver(observer);
         final Player player = playerWithId("cb500c98-c898-45be-b4e2-df826cb55653");
         nerdleGame.registerPlayer(player);
         for(int playerCount = 0; playerCount < NerdleGame.MAX_PLAYERS - 1; playerCount++) {

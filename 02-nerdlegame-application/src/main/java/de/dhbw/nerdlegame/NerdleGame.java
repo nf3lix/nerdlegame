@@ -7,12 +7,12 @@ import de.dhbw.nerdlegame.player.Player;
 
 import java.util.*;
 
-public class NerdleGame implements GameStateObservable, DetermineWinnerObservable {
+public class NerdleGame implements GameStateObservable, OnWinObservable {
 
     private final List<Player> players = new ArrayList<>();
 
     private final Set<GameStateObserver> gameStateObservers = new HashSet<>();
-    private final Set<DetermineWinnerObserver> determineWinnerObservers = new HashSet<>();
+    private final Set<OnWinObserver> winObservers = new HashSet<>();
     private final Map<Player, Integer> amountOfGuesses = new HashMap<>();
     private final Map<Player, Long> lastGuesses = new HashMap<>();
 
@@ -57,7 +57,7 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
         if(result.isCorrect()) {
             gameState.nextState();
             notifyGameStateObservers();
-            notifyWinnerDeterminedObservers(guess.player());
+            notifyOnWinObservers(guess.player());
         }
         return GuessResult.createFromGuess(calculation, guess.calculation());
     }
@@ -77,12 +77,12 @@ public class NerdleGame implements GameStateObservable, DetermineWinnerObservabl
     }
 
     @Override
-    public void addWinnerDeterminedListener(final DetermineWinnerObserver observer) {
-        determineWinnerObservers.add(observer);
+    public void addOnWinObserver(final OnWinObserver observer) {
+        winObservers.add(observer);
     }
 
     @Override
-    public void notifyWinnerDeterminedObservers(final Player player) {
-        determineWinnerObservers.forEach(observer -> observer.onWinnerDetermined(player));
+    public void notifyOnWinObservers(final Player player) {
+        winObservers.forEach(observer -> observer.onWinnerDetermined(player));
     }
 }
