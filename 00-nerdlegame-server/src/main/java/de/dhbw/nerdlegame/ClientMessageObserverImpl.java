@@ -26,6 +26,9 @@ public class ClientMessageObserverImpl implements ClientMessageObserver {
 
     @Override
     public void onClientMessageReceived(String message) {
+        if(message == null) {
+            return;
+        }
         if(message.startsWith("guess")) {
             try {
                 final Guess guess = new Guess(UUID.randomUUID(), player, new Calculation(message.split(" ")[1]));

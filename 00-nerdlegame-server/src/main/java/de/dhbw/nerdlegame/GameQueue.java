@@ -32,19 +32,23 @@ public class GameQueue implements ClientConnectedObserver {
         final Map<ClientHandler, Player> clients = new HashMap<>();
         final NerdleGame nerdleGame = new NerdleGame(new CalculationGeneratorImpl(), new GameTimerImpl());
         for(int socketCount = 0; socketCount < NerdleGame.MAX_PLAYERS; socketCount++) {
-            final ClientHandler clientHandler = queue.remove();
-            final Player player = new Player(new PlayerId(UUID.randomUUID()), new PlayerName("Player" + (socketCount + 1)));
-            nerdleGame.registerPlayer(player);
-            clients.put(clientHandler, player);
-            clientHandler.addClientMessageObserver(new ClientMessageObserverImpl(clientHandler, player, nerdleGame));
-            clientHandler.addClientConnectionClosedListener(() -> {
-                clients.keySet().forEach(client -> client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " left the game")));
-                log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
-            });
+            registerPlayerFromQueue(nerdleGame, clients, "Player" + (socketCount + 1));
         }
         addOnWinListener(nerdleGame, clients);
         clients.keySet().forEach(client -> clientsInGame.put(client, nerdleGame));
         log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
+    }
+
+    private void registerPlayerFromQueue(final NerdleGame nerdleGame, final Map<ClientHandler, Player> clients, final String playerName) {
+        final ClientHandler clientHandler = queue.remove();
+        final Player player = new Player(new PlayerId(UUID.randomUUID()), new PlayerName(playerName));
+        nerdleGame.registerPlayer(player);
+        clients.put(clientHandler, player);
+        clientHandler.addClientMessageObserver(new ClientMessageObserverImpl(clientHandler, player, nerdleGame));
+        clientHandler.addClientConnectionClosedListener(() -> {
+            clients.keySet().forEach(client -> client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " left the game")));
+            log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
+        });
     }
 
     private void addOnWinListener(final NerdleGame nerdleGame, final Map<ClientHandler, Player> clients) {

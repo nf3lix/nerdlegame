@@ -55,7 +55,9 @@ public class ClientHandler implements Runnable, Receiver, ClientMessageReceiver,
 
     @Override
     public void sendMessage(final Message message) {
-        out.println(message.toString());
+        try {
+            out.println(message.toString());
+        } catch (NullPointerException ignored) { }
     }
 
     @Override
