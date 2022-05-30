@@ -15,6 +15,7 @@ public class ConnectionObserverImpl implements ConnectionObserver {
 
     public ConnectionObserverImpl() {
         actions.put(PLAYER_WINS, new DisplayGameStateChanged());
+        actions.put(GAME_STATE_CHANGED, new DisplayGameStateChanged());
         actions.put(GUESS_RESULT, new DisplayGuessResult());
         actions.put(TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, new DisplayErrorMessage());
         actions.put(GUESSING_NOT_STARTED_YET, new DisplayGuessingNotStartedYet());
@@ -24,6 +25,10 @@ public class ConnectionObserverImpl implements ConnectionObserver {
     public void onMessageReceived(String content) {
         final Message message = new Message(content);
         final OnResponseAction action = actions.get(message.getMessageType());
+        if(action == null) {
+            new DisplayUnknownMessageType().run(message);
+            return;
+        }
         action.run(message);
     }
 
