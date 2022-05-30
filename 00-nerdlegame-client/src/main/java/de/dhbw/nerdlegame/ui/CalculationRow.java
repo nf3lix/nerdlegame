@@ -1,9 +1,12 @@
 package de.dhbw.nerdlegame.ui;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
+import de.dhbw.nerdlegame.calculation.CalculationDigit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class CalculationRow {
 
@@ -16,6 +19,17 @@ public class CalculationRow {
             final Font font = new Font("SansSerif", Font.BOLD, 20);
             textField.setHorizontalAlignment(JTextField.CENTER);
             textField.setFont(font);
+            textField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyTyped(final KeyEvent e) {
+                    try {
+                        CalculationDigit.getDigit(e.getKeyChar());
+                        super.keyTyped(e);
+                    } catch (IllegalArgumentException ignored) {
+                        e.consume();
+                    }
+                }
+            });
             panel.add(textField);
         }
         JButton button = new JButton("Guess");

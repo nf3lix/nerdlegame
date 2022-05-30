@@ -18,9 +18,7 @@ public class NerdleGameClient {
                 }
             };
             new Thread(runnable).start();
-
         });
-
     }
 
 }
