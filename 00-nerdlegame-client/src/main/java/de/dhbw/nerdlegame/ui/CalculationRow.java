@@ -5,6 +5,8 @@ import de.dhbw.nerdlegame.calculation.CalculationDigit;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -19,11 +21,15 @@ public class CalculationRow {
             final Font font = new Font("SansSerif", Font.BOLD, 20);
             textField.setHorizontalAlignment(JTextField.CENTER);
             textField.setFont(font);
+            textField.setTransferHandler(null);
             textField.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyTyped(final KeyEvent e) {
                     try {
                         CalculationDigit.getDigit(e.getKeyChar());
+                        if(textField.getText().length() != 0) {
+                            textField.setText("");
+                        }
                         super.keyTyped(e);
                     } catch (IllegalArgumentException ignored) {
                         e.consume();
