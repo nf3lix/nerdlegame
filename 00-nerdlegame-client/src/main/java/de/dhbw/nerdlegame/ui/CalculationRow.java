@@ -1,18 +1,13 @@
 package de.dhbw.nerdlegame.ui;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
-import de.dhbw.nerdlegame.calculation.CalculationDigit;
 
 import javax.swing.*;
 import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.util.ArrayList;
+import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,6 +26,23 @@ public class CalculationRow {
             textField.setHorizontalAlignment(JTextField.CENTER);
             textField.setFont(font);
             textField.setTransferHandler(null);
+            textField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    int offset;
+                    if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                        offset = 1;
+                    } else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
+                        offset = -1;
+                    }
+                    else return;
+                    try {
+                        final JTextField tf = textFields.get(count + offset);
+                        tf.requestFocus();
+                        super.keyReleased(e);
+                    } catch (NullPointerException ignored) { }
+                }
+            });
             PlainDocument doc = (PlainDocument) textField.getDocument();
             doc.setDocumentFilter(new CalculationDigitFilter());
             panel.add(textField);
