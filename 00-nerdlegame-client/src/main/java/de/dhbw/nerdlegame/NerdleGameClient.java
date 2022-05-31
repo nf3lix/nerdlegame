@@ -13,6 +13,8 @@ public class NerdleGameClient {
                 final ConnectionObserver observer = new ConnectionObserverImpl();
                 try {
                     final Client client = new Client("127.0.0.1", 5000, observer);
+                    window.addCommandListener(client);
+                    client.start();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

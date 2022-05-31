@@ -7,6 +7,7 @@ import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class CalculationRow {
 
     private final JPanel panel = new JPanel();
     private final List<JTextField> textFields = new LinkedList<>();
+    private final JButton guessButton;
 
     public CalculationRow() {
         panel.setLayout(new GridLayout(1, Calculation.NUMBER_OF_DIGITS + 1));
@@ -65,13 +67,23 @@ public class CalculationRow {
             doc.setDocumentFilter(filter);
             panel.add(textField);
         }
-        JButton button = new JButton("Guess");
-        button.setPreferredSize(new Dimension(200, 100));
-        panel.add(button);
+        this.guessButton = new JButton("Guess");
+        guessButton.setPreferredSize(new Dimension(200, 100));
+        panel.add(guessButton);
     }
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    JButton getGuessButton() {
+        return guessButton;
+    }
+
+    public String getText() throws IllegalArgumentException {
+        final StringBuilder stringBuilder = new StringBuilder();
+        textFields.forEach(textField -> stringBuilder.append(textField.getText()));
+        return stringBuilder.toString();
     }
 
 }
