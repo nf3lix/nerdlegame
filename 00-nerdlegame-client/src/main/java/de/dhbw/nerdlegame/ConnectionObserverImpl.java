@@ -24,6 +24,7 @@ public class ConnectionObserverImpl implements ConnectionObserver {
 
     @Override
     public void onMessageReceived(String content) {
+        System.out.println(content);
         final Message message = new Message(content);
         final OnResponseAction action = actions.get(message.getMessageType());
         if(action == null) {
