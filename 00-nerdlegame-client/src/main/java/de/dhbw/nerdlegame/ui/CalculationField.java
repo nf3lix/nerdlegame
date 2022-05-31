@@ -17,6 +17,7 @@ public class CalculationField {
             final CalculationRow row = new CalculationRow();
             rows.add(row);
             guessButtons.add(row.getGuessButton());
+            row.disable();
             panel.add(row.getPanel());
         }
     }
@@ -31,6 +32,14 @@ public class CalculationField {
 
     CalculationRow getRow(final int index) {
         return rows.get(index);
+    }
+
+    void enableRow(final int index) {
+        this.rows.get(index);
+    }
+
+    void disableRow(final int index) {
+        this.rows.get(index);
     }
 
 }

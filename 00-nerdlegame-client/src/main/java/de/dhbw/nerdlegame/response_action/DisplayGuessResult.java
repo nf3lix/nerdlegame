@@ -18,6 +18,8 @@ public class DisplayGuessResult implements OnResponseAction {
     @Override
     public void run(final Message message) {
         final GuessResult guessResult = new GuessResultMapper().toDomainModel(new GuessResultResource(message.getContent()));
+        mainWindow.disableRow(resultCount);
+        mainWindow.enableRow(resultCount + 1);
         mainWindow.displayGuessResult(resultCount, guessResult);
         resultCount++;
     }

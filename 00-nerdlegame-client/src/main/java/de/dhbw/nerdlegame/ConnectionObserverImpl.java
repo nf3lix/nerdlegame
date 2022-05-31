@@ -16,6 +16,7 @@ public class ConnectionObserverImpl implements ConnectionObserver {
 
     public ConnectionObserverImpl(final MainWindow mainWindow) {
         actions.put(PLAYER_WINS, new DisplayGameStateChanged());
+        actions.put(GAME_STARTS, new DisplayGameStarts(mainWindow));
         actions.put(GAME_STATE_CHANGED, new DisplayGameStateChanged());
         actions.put(GUESS_RESULT, new DisplayGuessResult(mainWindow));
         actions.put(TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, new DisplayErrorMessage());

@@ -47,9 +47,12 @@ public class MainWindow implements CommandObservable {
         this.calculationField.getRow(index).displayGuessResult(guessResult);
     }
 
-    public void setRowEnabled(final int index) {
-        System.out.println(index);
-        this.calculationField.getRow(index);
+    public void enableRow(final int index) {
+        this.calculationField.getRow(index).enable();
+    }
+
+    public void disableRow(final int index) {
+        this.calculationField.getRow(index).disable();
     }
 
     public void addFindGameButtonClickListener(final ActionListener listener) {

@@ -97,4 +97,14 @@ public class CalculationRow {
         }
     }
 
+    void enable() {
+        textFields.forEach(textField -> textField.setEnabled(true));
+        guessButton.setVisible(true);
+    }
+
+    void disable() {
+        textFields.forEach(textFields -> textFields.setEnabled(false));
+        guessButton.setVisible(false);
+    }
+
 }
