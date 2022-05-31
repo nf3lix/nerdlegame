@@ -29,6 +29,8 @@ public class CalculationRow {
             textField.setHorizontalAlignment(JTextField.CENTER);
             textField.setFont(font);
             textField.setTransferHandler(null);
+            textField.setBackground(Color.WHITE);
+            textField.setForeground(Color.BLACK);
             textField.addKeyListener(new KeyAdapter() {
                 @Override
                 public void keyReleased(KeyEvent e) {
@@ -92,7 +94,6 @@ public class CalculationRow {
         final GuessDigitResult[] results = guessResult.getDigitResults();
         for(int index = 0; index < Calculation.NUMBER_OF_DIGITS; index++) {
             final DigitResultTypeResource type = DigitResultTypeResource.fromDigitResult(results[index]);
-            textFields.get(index).setForeground(type.textColor());
             textFields.get(index).setBackground(type.backgroundColor());
         }
     }
@@ -105,6 +106,16 @@ public class CalculationRow {
     void disable() {
         textFields.forEach(textFields -> textFields.setEnabled(false));
         guessButton.setVisible(false);
+    }
+
+    void resetRow() {
+        guessButton.setVisible(false);
+        enable();
+        textFields.forEach(textField -> {
+            textField.setText("");
+            textField.setBackground(Color.WHITE);
+        });
+        disable();
     }
 
 }

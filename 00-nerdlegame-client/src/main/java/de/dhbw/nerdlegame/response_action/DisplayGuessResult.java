@@ -19,7 +19,9 @@ public class DisplayGuessResult implements OnResponseAction {
     public void run(final Message message) {
         final GuessResult guessResult = new GuessResultMapper().toDomainModel(new GuessResultResource(message.getContent()));
         mainWindow.disableRow(resultCount);
-        mainWindow.enableRow(resultCount + 1);
+        try {
+            mainWindow.enableRow(resultCount + 1);
+        } catch (IndexOutOfBoundsException ignored) { }
         mainWindow.displayGuessResult(resultCount, guessResult);
         resultCount++;
     }

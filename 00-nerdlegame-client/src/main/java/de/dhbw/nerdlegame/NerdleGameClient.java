@@ -6,9 +6,10 @@ import java.io.IOException;
 
 public class NerdleGameClient {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         final MainWindow window = new MainWindow();
         window.addFindGameButtonClickListener(action -> {
+            window.resetGame();
             final Runnable runnable = () -> {
                 final ConnectionObserver observer = new ConnectionObserverImpl(window);
                 try {

@@ -2,6 +2,7 @@ package de.dhbw.nerdlegame.ui;
 
 import de.dhbw.nerdlegame.CommandObservable;
 import de.dhbw.nerdlegame.CommandObserver;
+import de.dhbw.nerdlegame.NerdleGame;
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.GuessResult;
 
@@ -30,7 +31,7 @@ public class MainWindow implements CommandObservable {
         window.add(west, BorderLayout.WEST);
         window.setResizable(false);
         window.setVisible(true);
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < NerdleGame.MAX_GUESSES; i++) {
             final int index = i;
             calculationField.guessButtonAt(i).addActionListener(actionEvent -> observers.forEach(observer -> {
                 final String text = calculationField.getRow(index).getText();
@@ -42,6 +43,11 @@ public class MainWindow implements CommandObservable {
                 }
             }));
         }
+    }
+
+    public void resetGame() {
+        calculationField.resetField();
+        gameLog.resetLog();
     }
 
     public void displayGuessResult(final int index, final GuessResult guessResult) {
@@ -57,7 +63,7 @@ public class MainWindow implements CommandObservable {
     }
 
     public void disableAllRows() {
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < NerdleGame.MAX_GUESSES; i++) {
             this.calculationField.getRow(i).disable();
         }
     }

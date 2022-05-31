@@ -17,6 +17,7 @@ public class NerdleGame implements GameStateObservable, OnWinObservable {
     private final Map<Player, Long> lastGuesses = new HashMap<>();
 
     public static final int MAX_PLAYERS = 2;
+    public static final int MAX_GUESSES = 6;
     public static final int MIN_TIME_BETWEEN_GUESSES = 5 * 1000;
 
     private final GameTimer gameTimer;
@@ -47,6 +48,9 @@ public class NerdleGame implements GameStateObservable, OnWinObservable {
     public GuessResult makeGuess(final Guess guess) {
         if(gameState != GameState.GUESSING) {
             throw new GameStateException("Guesses can only be made during " + GameState.GUESSING.name() + " state. Current state is " + gameState.name());
+        }
+        if(amountOfGuesses.get(guess.player()) >= MAX_GUESSES) {
+            throw new NoMoreGuessesAvailable("You already made " + MAX_GUESSES + " guesses");
         }
         if(gameTimer.currentTimeInMillis() - lastGuesses.get(guess.player()) < MIN_TIME_BETWEEN_GUESSES) {
             throw new TooLittleTimeSinceLastGuess("You have to wait at least " + (MIN_TIME_BETWEEN_GUESSES / 1000) + "seconds until next guess");

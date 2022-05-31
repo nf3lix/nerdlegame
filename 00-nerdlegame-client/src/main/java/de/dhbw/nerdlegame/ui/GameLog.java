@@ -22,4 +22,8 @@ public class GameLog {
         this.textArea.append("\n" + message);
     }
 
+    void resetLog() {
+        textArea.setText("");
+    }
+
 }

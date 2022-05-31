@@ -1,5 +1,7 @@
 package de.dhbw.nerdlegame.ui;
 
+import de.dhbw.nerdlegame.NerdleGame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,8 +14,8 @@ public class CalculationField {
     private final List<CalculationRow> rows = new ArrayList<>();
 
     public CalculationField() {
-        panel.setLayout(new GridLayout(5, 1));
-        for(int i = 0; i < 5; i++) {
+        panel.setLayout(new GridLayout(NerdleGame.MAX_GUESSES, 1));
+        for(int i = 0; i < NerdleGame.MAX_GUESSES; i++) {
             final CalculationRow row = new CalculationRow();
             rows.add(row);
             guessButtons.add(row.getGuessButton());
@@ -34,12 +36,8 @@ public class CalculationField {
         return rows.get(index);
     }
 
-    void enableRow(final int index) {
-        this.rows.get(index);
-    }
-
-    void disableRow(final int index) {
-        this.rows.get(index);
+    void resetField() {
+        rows.forEach(CalculationRow::resetRow);
     }
 
 }
