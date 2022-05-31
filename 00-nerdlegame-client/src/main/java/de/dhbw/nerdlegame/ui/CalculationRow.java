@@ -7,7 +7,6 @@ import javax.swing.text.PlainDocument;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -40,11 +39,30 @@ public class CalculationRow {
                         final JTextField tf = textFields.get(count + offset);
                         tf.requestFocus();
                         super.keyReleased(e);
-                    } catch (NullPointerException ignored) { }
+                    } catch (IndexOutOfBoundsException ignored) { }
+                }
+
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE && textField.getText().equals("")) {
+                        try {
+                            final JTextField tf = textFields.get(count - 1);
+                            tf.requestFocus();
+                            super.keyReleased(e);
+                        } catch (IndexOutOfBoundsException ignored) { }
+                    }
+                    super.keyPressed(e);
                 }
             });
             PlainDocument doc = (PlainDocument) textField.getDocument();
-            doc.setDocumentFilter(new CalculationDigitFilter());
+            final CalculationDigitFilter filter = new CalculationDigitFilter();
+            filter.addDigitTypedListener(() -> {
+                try {
+                    final JTextField tf = textFields.get(count + 1);
+                    tf.requestFocus();
+                } catch (IndexOutOfBoundsException ignored) { }
+            });
+            doc.setDocumentFilter(filter);
             panel.add(textField);
         }
         JButton button = new JButton("Guess");
