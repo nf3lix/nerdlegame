@@ -56,6 +56,12 @@ public class MainWindow implements CommandObservable {
         this.calculationField.getRow(index).disable();
     }
 
+    public void disableAllRows() {
+        for(int i = 0; i < 5; i++) {
+            this.calculationField.getRow(i).disable();
+        }
+    }
+
     public void addLogMessage(final String message) {
         gameLog.addLogMessage(message);
     }

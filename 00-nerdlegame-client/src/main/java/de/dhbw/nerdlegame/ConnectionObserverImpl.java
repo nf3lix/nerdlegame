@@ -15,7 +15,7 @@ public class ConnectionObserverImpl implements ConnectionObserver {
     private final Map<MessageType, OnResponseAction> actions = new HashMap<>();
 
     public ConnectionObserverImpl(final MainWindow mainWindow) {
-        actions.put(PLAYER_WINS, new DisplayGameStateChanged(mainWindow));
+        actions.put(PLAYER_WINS, new DisplayPlayerWins(mainWindow));
         actions.put(GAME_STARTS, new DisplayGameStarts(mainWindow));
         actions.put(GAME_STATE_CHANGED, new DisplayGameStateChanged(mainWindow));
         actions.put(GUESS_RESULT, new DisplayGuessResult(mainWindow));
