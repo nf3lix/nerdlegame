@@ -10,7 +10,7 @@ public class NerdleGameClient {
         final MainWindow window = new MainWindow();
         window.addFindGameButtonClickListener(action -> {
             final Runnable runnable = () -> {
-                final ConnectionObserver observer = new ConnectionObserverImpl();
+                final ConnectionObserver observer = new ConnectionObserverImpl(window);
                 try {
                     final Client client = new Client("127.0.0.1", 5000, observer);
                     window.addCommandListener(client);

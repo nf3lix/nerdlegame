@@ -1,6 +1,10 @@
 package de.dhbw.nerdlegame.ui;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
+import de.dhbw.nerdlegame.guess.DigitResultType;
+import de.dhbw.nerdlegame.guess.GuessDigitResult;
+import de.dhbw.nerdlegame.guess.GuessResult;
+import de.dhbw.nerdlegame.resource.DigitResultTypeResource;
 
 import javax.swing.*;
 import javax.swing.text.PlainDocument;
@@ -84,6 +88,13 @@ public class CalculationRow {
         final StringBuilder stringBuilder = new StringBuilder();
         textFields.forEach(textField -> stringBuilder.append(textField.getText()));
         return stringBuilder.toString();
+    }
+
+    public void displayGuessResult(final GuessResult guessResult) {
+        final GuessDigitResult[] results = guessResult.getDigitResults();
+        for(int index = 0; index < Calculation.NUMBER_OF_DIGITS; index++) {
+            textFields.get(index).setBackground(DigitResultTypeResource.fromDigitResult(results[index]).color());
+        }
     }
 
 }

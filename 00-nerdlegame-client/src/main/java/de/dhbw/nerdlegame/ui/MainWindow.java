@@ -3,6 +3,7 @@ package de.dhbw.nerdlegame.ui;
 import de.dhbw.nerdlegame.CommandObservable;
 import de.dhbw.nerdlegame.CommandObserver;
 import de.dhbw.nerdlegame.calculation.Calculation;
+import de.dhbw.nerdlegame.guess.GuessResult;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,12 +16,12 @@ public class MainWindow implements CommandObservable {
     private final Set<CommandObserver> observers = new HashSet<>();
     private final JButton findGameButton = new JButton("Find game...");
     private final JFrame window = new JFrame("NerdleGame");
+    private final CalculationField calculationField = new CalculationField();
 
     public MainWindow() {
         window.setSize(800, 600);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setLayout(new BorderLayout());
-        final CalculationField calculationField = new CalculationField();
         window.add(calculationField.getPanel(), BorderLayout.CENTER);
         window.add(new GameLog().getPanel(), BorderLayout.SOUTH);
         final JPanel west = new JPanel(new GridLayout(5, 1));
@@ -40,6 +41,15 @@ public class MainWindow implements CommandObservable {
                 }
             }));
         }
+    }
+
+    public void displayGuessResult(final int index, final GuessResult guessResult) {
+        this.calculationField.getRow(index).displayGuessResult(guessResult);
+    }
+
+    public void setRowEnabled(final int index) {
+        System.out.println(index);
+        this.calculationField.getRow(index);
     }
 
     public void addFindGameButtonClickListener(final ActionListener listener) {
