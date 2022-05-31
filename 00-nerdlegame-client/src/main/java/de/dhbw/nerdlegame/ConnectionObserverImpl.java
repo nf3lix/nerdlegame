@@ -15,17 +15,16 @@ public class ConnectionObserverImpl implements ConnectionObserver {
     private final Map<MessageType, OnResponseAction> actions = new HashMap<>();
 
     public ConnectionObserverImpl(final MainWindow mainWindow) {
-        actions.put(PLAYER_WINS, new DisplayGameStateChanged());
+        actions.put(PLAYER_WINS, new DisplayGameStateChanged(mainWindow));
         actions.put(GAME_STARTS, new DisplayGameStarts(mainWindow));
-        actions.put(GAME_STATE_CHANGED, new DisplayGameStateChanged());
+        actions.put(GAME_STATE_CHANGED, new DisplayGameStateChanged(mainWindow));
         actions.put(GUESS_RESULT, new DisplayGuessResult(mainWindow));
-        actions.put(TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, new DisplayErrorMessage());
-        actions.put(GUESSING_NOT_STARTED_YET, new DisplayGuessingNotStartedYet());
+        actions.put(TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, new DisplayErrorMessage(mainWindow));
+        actions.put(GUESSING_NOT_STARTED_YET, new DisplayGuessingNotStartedYet(mainWindow));
     }
 
     @Override
     public void onMessageReceived(String content) {
-        System.out.println(content);
         final Message message = new Message(content);
         final OnResponseAction action = actions.get(message.getMessageType());
         if(action == null) {

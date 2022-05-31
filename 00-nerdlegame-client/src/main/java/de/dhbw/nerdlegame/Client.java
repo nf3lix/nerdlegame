@@ -23,7 +23,6 @@ public class Client implements CommandObserver {
 
     @Override
     public void onCommand(String command) {
-        System.out.println(command);
         if(command.equals("quit")) {
             try {
                 socket.close();

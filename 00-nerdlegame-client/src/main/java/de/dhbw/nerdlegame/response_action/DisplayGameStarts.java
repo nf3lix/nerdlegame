@@ -14,7 +14,7 @@ public class DisplayGameStarts implements OnResponseAction {
     @Override
     public void run(Message message) {
         mainWindow.enableRow(0);
-        System.out.println(message.getContent());
+        mainWindow.addLogMessage("Game starts");
     }
 
 }

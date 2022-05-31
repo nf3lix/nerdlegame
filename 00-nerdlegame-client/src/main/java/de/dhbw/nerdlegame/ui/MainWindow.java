@@ -17,13 +17,14 @@ public class MainWindow implements CommandObservable {
     private final JButton findGameButton = new JButton("Find game...");
     private final JFrame window = new JFrame("NerdleGame");
     private final CalculationField calculationField = new CalculationField();
+    private final GameLog gameLog = new GameLog();
 
     public MainWindow() {
         window.setSize(800, 600);
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         window.setLayout(new BorderLayout());
         window.add(calculationField.getPanel(), BorderLayout.CENTER);
-        window.add(new GameLog().getPanel(), BorderLayout.SOUTH);
+        window.add(gameLog.getPanel(), BorderLayout.SOUTH);
         final JPanel west = new JPanel(new GridLayout(5, 1));
         west.add(findGameButton);
         window.add(west, BorderLayout.WEST);
@@ -53,6 +54,10 @@ public class MainWindow implements CommandObservable {
 
     public void disableRow(final int index) {
         this.calculationField.getRow(index).disable();
+    }
+
+    public void addLogMessage(final String message) {
+        gameLog.addLogMessage(message);
     }
 
     public void addFindGameButtonClickListener(final ActionListener listener) {

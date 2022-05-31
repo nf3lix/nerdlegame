@@ -8,20 +8,35 @@ import java.awt.*;
 public enum DigitResultTypeResource {
     CORRECT(DigitResultType.CORRECT) {
         @Override
-        public Color color() {
+        public Color backgroundColor() {
             return new Color(120, 250, 90);
+        }
+
+        @Override
+        public Color textColor() {
+            return Color.BLACK;
         }
     },
     WRONG_SPOT(DigitResultType.WRONG_SPOT) {
         @Override
-        public Color color() {
+        public Color backgroundColor() {
             return new Color(105, 50, 245);
+        }
+
+        @Override
+        public Color textColor() {
+            return Color.WHITE;
         }
     },
     NOT_IN_SOLUTION(DigitResultType.NOT_IN_SOLUTION) {
         @Override
-        public Color color() {
+        public Color backgroundColor() {
             return new Color(120, 120, 120);
+        }
+
+        @Override
+        public Color textColor() {
+            return Color.WHITE;
         }
     };
 
@@ -31,7 +46,8 @@ public enum DigitResultTypeResource {
         this.resultType = resultType;
     }
 
-    public abstract Color color();
+    public abstract Color backgroundColor();
+    public abstract Color textColor();
 
     public static DigitResultTypeResource fromDigitResult(final GuessDigitResult guessDigitResult) {
         for(final DigitResultTypeResource typeResource : DigitResultTypeResource.values()) {
