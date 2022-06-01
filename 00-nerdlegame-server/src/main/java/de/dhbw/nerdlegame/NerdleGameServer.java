@@ -8,7 +8,7 @@ public class NerdleGameServer {
 
     public static void main(String[] args) throws IOException {
         final Server server = new Server(5000);
-        server.addClientConnectedListener(new GameQueue());
+        server.addClientConnectedListener(new GameQueue(new CalculationGeneratorImpl()));
         server.start();
     }
 

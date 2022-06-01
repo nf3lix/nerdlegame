@@ -19,6 +19,11 @@ public class GameQueue implements ClientConnectedObserver {
 
     private final Queue<ClientHandler> queue = new LinkedList<>();
     private final Map<ClientHandler, NerdleGame> clientsInGame = new HashMap<>();
+    private final CalculationGenerator calculationGenerator;
+
+    public GameQueue(final CalculationGenerator calculationGenerator) {
+        this.calculationGenerator = calculationGenerator;
+    }
 
     @Override
     public void onClientConnected(final ClientHandler clientHandler) {
@@ -34,7 +39,7 @@ public class GameQueue implements ClientConnectedObserver {
     private void startNewGame() {
         log("Start new game...");
         final Map<ClientHandler, Player> clients = new HashMap<>();
-        final NerdleGame nerdleGame = new NerdleGame(new CalculationGeneratorImpl(), new GameTimerImpl());
+        final NerdleGame nerdleGame = new NerdleGame(calculationGenerator, new GameTimerImpl());
         for(int socketCount = 0; socketCount < NerdleGame.MAX_PLAYERS; socketCount++) {
             registerPlayerFromQueue(nerdleGame, clients, "Player" + (socketCount + 1));
         }
