@@ -76,6 +76,10 @@ public class MainWindow implements CommandObservable {
         findGameButton.addActionListener(listener);
     }
 
+    public void setFindGameButtonEnabled(final boolean enabled) {
+        findGameButton.setEnabled(enabled);
+    }
+
     @Override
     public void addCommandListener(CommandObserver observer) {
         this.observers.add(observer);
