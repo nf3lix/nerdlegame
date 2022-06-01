@@ -80,4 +80,9 @@ public class MainWindow implements CommandObservable {
     public void addCommandListener(CommandObserver observer) {
         this.observers.add(observer);
     }
+
+    public JFrame frame() {
+        return window;
+    }
+
 }

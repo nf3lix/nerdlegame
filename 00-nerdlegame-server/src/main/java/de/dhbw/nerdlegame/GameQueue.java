@@ -2,6 +2,7 @@ package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.GuessResult;
+import de.dhbw.nerdlegame.listeners.OnLastRemainingPlayerObserver;
 import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.message.MessageType;
 import de.dhbw.nerdlegame.player.Player;
@@ -38,6 +39,7 @@ public class GameQueue implements ClientConnectedObserver {
             registerPlayerFromQueue(nerdleGame, clients, "Player" + (socketCount + 1));
         }
         addOnWinListener(nerdleGame, clients);
+        addOnLastRemainingPlayerListener(nerdleGame, clients);
         clients.keySet().forEach(client -> clientsInGame.put(client, nerdleGame));
         log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
     }
@@ -61,13 +63,25 @@ public class GameQueue implements ClientConnectedObserver {
                 if(clients.get(client) == player) {
                     final GuessResult guessResult = GuessResult.createFromGuess(new Calculation("11+11=22"), new Calculation("11+11=22"));
                     client.sendMessage(new Message(MessageType.GUESS_RESULT, new GuessResultResource(guessResult).toString()));
+                    client.sendMessage(new Message(MessageType.PLAYER_WINS, "You guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses. You have won!"));
+                } else {
+                    client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses"));
                 }
-                client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses"));
                 clientsInGame.remove(client);
                 client.closeConnection();
                 log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
             });
         });
+    }
+
+    private void addOnLastRemainingPlayerListener(final NerdleGame nerdleGame, final Map<ClientHandler, Player> clients) {
+        nerdleGame.addOnLastRemainingPlayerListener(player -> clients.keySet().forEach(client -> {
+            if(clients.get(client) == player) {
+                client.sendMessage(new Message(MessageType.PLAYER_WINS, "You are the last remaining player. You have won!"));
+                return;
+            }
+            client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " has won since he is the last remaining player"));
+        }));
     }
 
     private void log(final String logMessage) {

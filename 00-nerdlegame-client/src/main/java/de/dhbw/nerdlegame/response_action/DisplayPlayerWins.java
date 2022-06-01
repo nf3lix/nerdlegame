@@ -18,7 +18,7 @@ public class DisplayPlayerWins implements OnResponseAction {
         this.mainWindow.disableAllRows();
         this.mainWindow.addLogMessage(message.getContent());
         this.mainWindow.addLogMessage("Game over");
-        JOptionPane.showMessageDialog(null, message.getContent());
+        JOptionPane.showMessageDialog(mainWindow.frame(), message.getContent());
     }
 
 }

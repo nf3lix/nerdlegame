@@ -2,6 +2,7 @@ package de.dhbw.nerdlegame;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.Guess;
+import de.dhbw.nerdlegame.listeners.OnWinObserver;
 import de.dhbw.nerdlegame.player.Player;
 import de.dhbw.nerdlegame.player.PlayerId;
 import org.junit.jupiter.api.Test;
