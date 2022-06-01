@@ -14,13 +14,17 @@ import de.dhbw.nerdlegame.resource.GuessResultResource;
 import de.dhbw.nerdlegame.server.ClientHandler;
 import de.dhbw.nerdlegame.server.ClientMessageObserver;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
-public class ClientMessageObserverImpl implements ClientMessageObserver {
+public class ClientMessageObserverImpl implements ClientMessageObserver, OnPlayerGuessObservable {
 
     private final ClientHandler clientHandler;
     private final Player player;
     private final NerdleGame nerdleGame;
+
+    private final Set<OnPlayerGuessObserver> playerGuessObservers = new HashSet<>();
 
     public ClientMessageObserverImpl(final ClientHandler clientHandler, final Player player, final NerdleGame nerdleGame) {
         this.clientHandler = clientHandler;
@@ -39,6 +43,7 @@ public class ClientMessageObserverImpl implements ClientMessageObserver {
                 try {
                     final GuessResult guessResult = nerdleGame.makeGuess(guess);
                     clientHandler.sendMessage(new Message(MessageType.GUESS_RESULT, new GuessResultResource(guessResult).toString()));
+                    playerGuessObservers.forEach(observer -> observer.onPlayerGuess(guess.player(), guessResult));
                 } catch (TooLittleTimeSinceLastGuess e) {
                     clientHandler.sendMessage(new Message(MessageType.TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, e.getMessage()));
                 } catch (NoMoreGuessesAvailable e) {
@@ -48,6 +53,11 @@ public class ClientMessageObserverImpl implements ClientMessageObserver {
                 clientHandler.sendMessage(new Message(MessageType.GUESSING_NOT_STARTED_YET, e.getMessage()));
             }
         }
+    }
+
+    @Override
+    public void addOnPlayerGuessListener(OnPlayerGuessObserver observer) {
+        playerGuessObservers.add(observer);
     }
 
 }

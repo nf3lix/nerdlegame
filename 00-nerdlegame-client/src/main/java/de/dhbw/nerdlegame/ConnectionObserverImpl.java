@@ -22,6 +22,7 @@ public class ConnectionObserverImpl implements ConnectionObserver {
         actions.put(TOO_LITTLE_TIME_SINCE_LAST_GUESS_ERROR, new DisplayErrorMessage(mainWindow));
         actions.put(GUESSING_NOT_STARTED_YET, new DisplayGuessingNotStartedYet(mainWindow));
         actions.put(NO_MORE_GUESSES_AVAILABLE, new DisplayNoMoreGuessesAvailable(mainWindow));
+        actions.put(PLAYER_GUESS, new DisplayOpponentGuess(mainWindow));
     }
 
     @Override

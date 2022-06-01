@@ -2,6 +2,8 @@ package de.dhbw.nerdlegame.game;
 
 import de.dhbw.nerdlegame.CalculationGenerator;
 import de.dhbw.nerdlegame.NerdleGame;
+import de.dhbw.nerdlegame.guess.DigitResultType;
+import de.dhbw.nerdlegame.guess.GuessResult;
 import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.message.MessageType;
 import de.dhbw.nerdlegame.player.Player;
@@ -11,8 +13,9 @@ import de.dhbw.nerdlegame.server.ClientConnectedObserver;
 import de.dhbw.nerdlegame.server.ClientHandler;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
-public class GameQueue implements ClientConnectedObserver {
+public class GameQueue implements ClientConnectedObserver, OnPlayerGuessObserver {
 
     private static final String LOG_PREFIX = "[GAME QUEUE]";
 
@@ -54,7 +57,14 @@ public class GameQueue implements ClientConnectedObserver {
         nerdleGame.registerPlayer(player);
         clientHandler.sendMessage(new Message(MessageType.GAME_STARTS, "Game starts"));
         clients.put(clientHandler, player);
-        clientHandler.addClientMessageObserver(new ClientMessageObserverImpl(clientHandler, player, nerdleGame));
+        final ClientMessageObserverImpl clientMessageObserver = new ClientMessageObserverImpl(clientHandler, player, nerdleGame);
+        clientMessageObserver.addOnPlayerGuessListener((player1, guess) -> clients.keySet().forEach(client -> {
+            if(clients.get(client) != player1) {
+                final int correctDigits = (int) Arrays.stream(guess.getDigitResults()).filter(digit -> digit.resultType() == DigitResultType.CORRECT).count();
+                client.sendMessage(new Message(MessageType.PLAYER_GUESS, player1.playerName() + " made a guess with " + correctDigits + " correct digits"));
+            }
+        }));
+        clientHandler.addClientMessageObserver(clientMessageObserver);
         clientHandler.addClientConnectionClosedListener(() -> {
             clients.remove(clientHandler);
             if(clients.size() == 1) {
@@ -70,6 +80,11 @@ public class GameQueue implements ClientConnectedObserver {
 
     static void log(final String logMessage) {
         System.out.println(LOG_PREFIX + " " + logMessage);
+    }
+
+    @Override
+    public void onPlayerGuess(Player player, GuessResult guess) {
+
     }
 
 }
