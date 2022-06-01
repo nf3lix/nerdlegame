@@ -1,5 +1,9 @@
-package de.dhbw.nerdlegame;
+package de.dhbw.nerdlegame.game;
 
+import de.dhbw.nerdlegame.GameStateException;
+import de.dhbw.nerdlegame.NerdleGame;
+import de.dhbw.nerdlegame.NoMoreGuessesAvailable;
+import de.dhbw.nerdlegame.TooLittleTimeSinceLastGuess;
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.Guess;
 import de.dhbw.nerdlegame.guess.GuessResult;

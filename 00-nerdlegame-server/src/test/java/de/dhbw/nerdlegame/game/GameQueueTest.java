@@ -1,10 +1,12 @@
-package de.dhbw.nerdlegame;
+package de.dhbw.nerdlegame.game;
 
+import de.dhbw.nerdlegame.CalculationGenerator;
+import de.dhbw.nerdlegame.NerdleGame;
 import de.dhbw.nerdlegame.calculation.Calculation;
+import de.dhbw.nerdlegame.game.GameQueue;
 import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.message.MessageType;
 import de.dhbw.nerdlegame.server.ClientHandler;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 

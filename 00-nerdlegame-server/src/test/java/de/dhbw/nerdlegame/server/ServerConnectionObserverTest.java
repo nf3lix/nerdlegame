@@ -1,4 +1,4 @@
-package de.dhbw.nerdlegame;
+package de.dhbw.nerdlegame.server;
 
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.Guess;

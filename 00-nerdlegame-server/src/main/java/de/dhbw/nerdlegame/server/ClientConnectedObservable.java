@@ -1,6 +1,4 @@
-package de.dhbw.nerdlegame;
-
-import de.dhbw.nerdlegame.server.ClientHandler;
+package de.dhbw.nerdlegame.server;
 
 public interface ClientConnectedObservable {
     void addClientConnectedListener(ClientConnectedObserver observer);

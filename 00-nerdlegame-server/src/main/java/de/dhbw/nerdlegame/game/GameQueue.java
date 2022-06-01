@@ -1,14 +1,16 @@
-package de.dhbw.nerdlegame;
+package de.dhbw.nerdlegame.game;
 
+import de.dhbw.nerdlegame.CalculationGenerator;
+import de.dhbw.nerdlegame.NerdleGame;
 import de.dhbw.nerdlegame.calculation.Calculation;
 import de.dhbw.nerdlegame.guess.GuessResult;
-import de.dhbw.nerdlegame.listeners.OnLastRemainingPlayerObserver;
 import de.dhbw.nerdlegame.message.Message;
 import de.dhbw.nerdlegame.message.MessageType;
 import de.dhbw.nerdlegame.player.Player;
 import de.dhbw.nerdlegame.player.PlayerId;
 import de.dhbw.nerdlegame.player.PlayerName;
 import de.dhbw.nerdlegame.resource.GuessResultResource;
+import de.dhbw.nerdlegame.server.ClientConnectedObserver;
 import de.dhbw.nerdlegame.server.ClientHandler;
 
 import java.util.*;

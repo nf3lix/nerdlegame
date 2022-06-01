@@ -1,5 +1,6 @@
-package de.dhbw.nerdlegame;
+package de.dhbw.nerdlegame.game;
 
+import de.dhbw.nerdlegame.CalculationGenerator;
 import de.dhbw.nerdlegame.calculation.Calculation;
 
 import java.io.BufferedReader;

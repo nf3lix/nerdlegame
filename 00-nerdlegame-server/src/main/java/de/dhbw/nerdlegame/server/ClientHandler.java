@@ -1,6 +1,5 @@
 package de.dhbw.nerdlegame.server;
 
-import de.dhbw.nerdlegame.Receiver;
 import de.dhbw.nerdlegame.message.Message;
 
 import java.io.BufferedReader;
