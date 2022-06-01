@@ -65,20 +65,7 @@ public class GameQueue implements ClientConnectedObserver {
     }
 
     private void addOnWinListener(final NerdleGame nerdleGame, final Map<ClientHandler, Player> clients) {
-        nerdleGame.addOnWinObserver(player -> {
-            clients.keySet().forEach(client -> {
-                if(clients.get(client) == player) {
-                    final GuessResult guessResult = GuessResult.createFromGuess(new Calculation("11+11=22"), new Calculation("11+11=22"));
-                    client.sendMessage(new Message(MessageType.GUESS_RESULT, new GuessResultResource(guessResult).toString()));
-                    client.sendMessage(new Message(MessageType.PLAYER_WINS, "You guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses. You have won!"));
-                } else {
-                    client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " guessed the calculation after " + nerdleGame.amountOfGuesses(player) + " guesses"));
-                }
-                clientsInGame.remove(client);
-                client.closeConnection();
-                log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
-            });
-        });
+        nerdleGame.addOnWinObserver(new OnWinListenerImpl(queue, nerdleGame, clientsInGame, clients));
     }
 
     private void addOnLastRemainingPlayerListener(final NerdleGame nerdleGame, final Map<ClientHandler, Player> clients) {
@@ -91,7 +78,7 @@ public class GameQueue implements ClientConnectedObserver {
         }));
     }
 
-    private void log(final String logMessage) {
+    static void log(final String logMessage) {
         System.out.println(LOG_PREFIX + " " + logMessage);
     }
 
