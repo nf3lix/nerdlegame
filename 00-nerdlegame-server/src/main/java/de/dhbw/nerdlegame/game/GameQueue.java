@@ -56,7 +56,10 @@ public class GameQueue implements ClientConnectedObserver {
         clients.put(clientHandler, player);
         clientHandler.addClientMessageObserver(new ClientMessageObserverImpl(clientHandler, player, nerdleGame));
         clientHandler.addClientConnectionClosedListener(() -> {
-            clients.keySet().forEach(client -> client.sendMessage(new Message(MessageType.PLAYER_WINS, player.playerName() + " left the game")));
+            clients.remove(clientHandler);
+            if(clients.size() == 1) {
+                clients.keySet().iterator().next().sendMessage(new Message(MessageType.PLAYER_WINS, "You are the last remaining player. You have won!"));
+            }
             log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
         });
     }
