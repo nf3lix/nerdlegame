@@ -19,6 +19,7 @@ public class DisplayPlayerWins implements OnResponseAction {
         this.mainWindow.addLogMessage(message.getContent());
         this.mainWindow.addLogMessage("Game over");
         JOptionPane.showMessageDialog(mainWindow.frame(), message.getContent());
+        System.exit(0);
     }
 
 }
