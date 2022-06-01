@@ -11,7 +11,8 @@ public class GameLog {
     public GameLog() {
         textArea.setEditable(false);
         textArea.setPreferredSize(new Dimension(500, 200));
-        panel.add(textArea);
+        final JScrollPane scrollPane = new JScrollPane(textArea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        panel.add(scrollPane);
     }
 
     public JPanel getPanel() {

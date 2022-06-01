@@ -24,6 +24,10 @@ public enum CalculationDigit {
         this.c = c;
     }
 
+    public char digit() {
+        return c;
+    }
+
     public static CalculationDigit getDigit(final char c) {
         for(CalculationDigit digit : CalculationDigit.values()) {
             if(digit.c == c) {

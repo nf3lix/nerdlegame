@@ -33,9 +33,7 @@ public class NerdleGame implements GameStateObservable, OnWinObservable, OnLastR
     public NerdleGame(final CalculationGenerator generator, final GameTimer gameTimer) {
         this.calculation = generator.nextCalculation();
         this.gameTimer = gameTimer;
-        for(int i = 0; i < 8; i++) {
-            System.out.println(calculation.getDigit(i));
-        }
+        printCalculation();
     }
 
     public void registerPlayer(final Player player) {
@@ -107,4 +105,13 @@ public class NerdleGame implements GameStateObservable, OnWinObservable, OnLastR
     public void addOnLastRemainingPlayerListener(OnLastRemainingPlayerObserver observer) {
         this.lastRemainingPlayerObservers.add(observer);
     }
+
+    private void printCalculation() {
+        final StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < Calculation.NUMBER_OF_DIGITS; i++) {
+            stringBuilder.append(calculation.getDigit(i).digit());
+        }
+        System.out.println("[NerdleGame] " + stringBuilder);
+    }
+
 }
