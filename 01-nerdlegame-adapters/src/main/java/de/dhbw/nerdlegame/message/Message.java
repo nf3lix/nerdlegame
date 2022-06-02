@@ -2,7 +2,7 @@ package de.dhbw.nerdlegame.message;
 
 public class Message {
 
-    private static final String separator = "\u0590";
+    private static final String separator = "~";
     private final String messageType;
     private final String content;
 

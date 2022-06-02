@@ -11,17 +11,17 @@ public class MessageTest {
     @Test
     public void createFromPrefixAndContent() {
         final Message message = new Message(PLAYER_WINS, "CONTENT");
-        assertEquals(message.toString(), PLAYER_WINS.name() + "\u0590CONTENT");
+        assertEquals(message.toString(), PLAYER_WINS.name() + "~CONTENT");
     }
 
     @Test
     public void throwExceptionWhenMessageContainsSeparator() {
-        assertThrows(MalformedMessage.class, () -> new Message(PLAYER_WINS, "CONTENT\u0590"));
+        assertThrows(MalformedMessage.class, () -> new Message(PLAYER_WINS, "CONTENT~"));
     }
 
     @Test
     public void createMessageObjectFromString() {
-        final Message message = new Message(PLAYER_WINS.name() + "\u0590CONTENT");
+        final Message message = new Message(PLAYER_WINS.name() + "~CONTENT");
         assertEquals(message.getMessageType(), PLAYER_WINS);
         assertEquals(message.getContent(), "CONTENT");
     }
@@ -33,8 +33,8 @@ public class MessageTest {
 
     @Test
     public void throwExceptionWhenRawMessageContainMultipleSeparators() {
-        assertThrows(MalformedMessage.class, () -> new Message("MESSAGE\u0590_\u0590CONTENT"));
-        assertThrows(MalformedMessage.class, () -> new Message("\u0590MESSAGE\u0590CONTENT"));
+        assertThrows(MalformedMessage.class, () -> new Message("MESSAGE~_~CONTENT"));
+        assertThrows(MalformedMessage.class, () -> new Message("~MESSAGE~CONTENT"));
     }
 
 }

@@ -58,7 +58,7 @@ public class GameQueue implements ClientConnectedObserver, OnPlayerGuessObserver
         clientHandler.sendMessage(new Message(MessageType.GAME_STARTS, "Game starts"));
         clients.put(clientHandler, player);
         final ClientMessageObserverImpl clientMessageObserver = new ClientMessageObserverImpl(clientHandler, player, nerdleGame);
-        clientMessageObserver.addOnPlayerGuessListener((player1, guess) -> clients.keySet().forEach(client -> {
+        clientMessageObserver.addOnPlayerGuessListener((player1, guess) -> clients.keySet().iterator().forEachRemaining(client -> {
             if(clients.get(client) != player1) {
                 final int correctDigits = (int) Arrays.stream(guess.getDigitResults()).filter(digit -> digit.resultType() == DigitResultType.CORRECT).count();
                 client.sendMessage(new Message(MessageType.PLAYER_GUESS, player1.playerName() + " made a guess with " + correctDigits + " correct digits"));

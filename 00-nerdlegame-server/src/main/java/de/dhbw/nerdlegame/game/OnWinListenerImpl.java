@@ -30,7 +30,7 @@ public class OnWinListenerImpl implements OnWinObserver {
 
     @Override
     public void onWinnerDetermined(Player player) {
-        clients.keySet().forEach(client -> {
+        clients.keySet().iterator().forEachRemaining(client -> {
             if(clients.get(client) == player) {
                 final GuessResult guessResult = GuessResult.createFromGuess(new Calculation("11+11=22"), new Calculation("11+11=22"));
                 client.sendMessage(new Message(MessageType.GUESS_RESULT, new GuessResultResource(guessResult).toString()));
@@ -42,6 +42,9 @@ public class OnWinListenerImpl implements OnWinObserver {
             client.closeConnection();
             GameQueue.log("Players in queue: " + queue.size() + "; Players in game: " + clientsInGame.size());
         });
+        // clients.keySet().forEach(client -> {
+        //
+        // });
     }
 
 }
