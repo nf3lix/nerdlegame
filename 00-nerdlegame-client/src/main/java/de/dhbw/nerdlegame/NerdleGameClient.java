@@ -8,6 +8,8 @@ import java.io.IOException;
 public class NerdleGameClient {
 
     public static void main(String[] args) {
+        final String serverAddress = args[0];
+        final int serverPort = Integer.parseInt(args[1]);
         final MainWindow window = new MainWindow();
         window.addFindGameButtonClickListener(action -> {
             window.resetGame();
@@ -15,7 +17,7 @@ public class NerdleGameClient {
                 window.setFindGameButtonEnabled(false);
                 final ConnectionObserver observer = new ConnectionObserverImpl(window);
                 try {
-                    final Client client = new Client("127.0.0.1", 5000, observer);
+                    final Client client = new Client(serverAddress, serverPort, observer);
                     window.addCommandListener(client);
                     client.start();
                 } catch (IOException e) {
