@@ -7,6 +7,7 @@
 - Diese Version:
   - 1 vs. 1 (bzw. durch Ändern einer Variable auch mit mehr als zwei Spielern)
   - wer den Term als erstes errät, gewinnt die Runde
+  - Term wird per Zufallsprinzip durch den Server bestimmt; Nach Abgabe eines Tipps erhält der Client eine entsprechende Antwort, welche Ziffern richtig oder falsch sind
 
 ## Applikation    
   - Java Anwendung
