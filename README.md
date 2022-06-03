@@ -22,7 +22,7 @@
   1. Im Hauptverzeichnis ausführen:
   2. ```mvn clean install```
   3. ```mvn exec:java -pl 00-nerdlegame-server -Dexec.args="5000"``` (Server starten unter Port 5000)
-  4. ```mvn exec:java -pl 00-nerdlegame-client -Dexec.args="127.0.0.1 5000"``` (Client starten unter Angabe der Serer Adresse und des Ports -> zwei Mal um Runde spielen zu können)
+  4. ```mvn exec:java -pl 00-nerdlegame-client -Dexec.args="127.0.0.1 5000"``` (Client starten unter Angabe der Server Adresse und des Ports -> zwei Mal um Runde spielen zu können)
   5. In der UI der beiden Clients auf "Find game..." klicken
   6. Spaß haben (oder halt auch nicht, je nach Rechnung... wer cheaten möchte, kann sich aber auch einfach in der Konsolen-Ausgaben des Servers die Lösung anschauen)
 - ![Einfache UI](https://i.imgur.com/gtakRyS.png)
